@@ -1,0 +1,6 @@
+framework module SmileTouchID {
+  umbrella header "SmileTouchID-umbrella.h"
+
+  export *
+  module * { export * }
+}
