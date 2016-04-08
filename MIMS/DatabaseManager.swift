@@ -32,7 +32,7 @@ class User {
 class DBManager {
     
     let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true).first!
-    let userTable:Table
+    let userTable:Table!
     var database: Connection!
     
     
