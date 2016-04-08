@@ -12,6 +12,7 @@ import SQLite.Swift
 enum DatabaseError : ErrorType {
     case BadConnection(message: String)
     case NoResult(message: String)
+    //TODO: Add more cases
 }
 
 
