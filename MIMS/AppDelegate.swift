@@ -24,8 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             $0.clientKey = "com.mims.umllovers.pbush25.masterKey39048039"
             $0.server = "http://mims-umllovers.herokuapp.com/parse"
         }
-        
         Parse.initializeWithConfiguration(configuration)
+        
+        Patient.registerSubclass()
+        Department.registerSubclass()
+        InsuranceInfo.registerSubclass()
+        Address.registerSubclass()
+        Institution.registerSubclass()
+        FinancialInformation.registerSubclass()
+        PatientRecord.registerSubclass()
         
         IQKeyboardManager.sharedManager().enable = true
         return true
