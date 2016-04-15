@@ -25,11 +25,12 @@
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>mims-umllovers.herokuapp.com</key>
-			<dict/>
-			<key>NSIncludesSubdomains</key>
-			<true/>
-			<key>NSExceptionAllowsInsecureHTTPLoads</key>
-			<true/>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
 	<key>LSRequiresIPhoneOS</key>
