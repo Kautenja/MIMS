@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Parse
+import IQKeyboardManager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +18,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let configuration = ParseClientConfiguration {
+            $0.applicationId = "com.mims.umllovers.appID199384755"
+            $0.clientKey = "com.mims.umllovers.pbush25.masterKey39048039"
+            $0.server = "http://mims-umllovers.herokuapp.com/parse"
+        }
+        
+        Parse.initializeWithConfiguration(configuration)
+        
+        IQKeyboardManager.sharedManager().enable = true
         return true
     }
 
