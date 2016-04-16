@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		17A2638F1CC140F40092B027 /* ParseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A2638E1CC140F40092B027 /* ParseManager.swift */; };
+		6787431709933676BEAB7178 /* Pods_MIMS_MIMSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CE67DC1A201621FFADB68E /* Pods_MIMS_MIMSTests.framework */; };
 		8F0CD4221CB737F500615490 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4211CB737F500615490 /* AppDelegate.swift */; };
 		8F0CD4241CB737F500615490 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4231CB737F500615490 /* ViewController.swift */; };
 		8F0CD4271CB737F500615490 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F0CD4251CB737F500615490 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 		8F0CD42C1CB737F500615490 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F0CD42A1CB737F500615490 /* LaunchScreen.storyboard */; };
 		8F0CD4371CB737F500615490 /* MIMSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4361CB737F500615490 /* MIMSTests.swift */; };
 		8F0CD4431CB7388300615490 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4421CB7388300615490 /* DatabaseManager.swift */; };
+		8F1E0F551CC1EC8300FE92EB /* ParseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1E0F541CC1EC8300FE92EB /* ParseTests.swift */; };
 		D110DD7B38F1143E0AD23770 /* Pods_MIMS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB677F43484CB2D4FB2691F /* Pods_MIMS.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		084498F36BD44B8D1239DB17 /* Pods-MIMS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MIMS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MIMS/Pods-MIMS.release.xcconfig"; sourceTree = "<group>"; };
+		14CE67DC1A201621FFADB68E /* Pods_MIMS_MIMSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MIMS_MIMSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		17A2638E1CC140F40092B027 /* ParseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseManager.swift; sourceTree = "<group>"; };
 		7CB677F43484CB2D4FB2691F /* Pods_MIMS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MIMS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F0CD41E1CB737F400615490 /* MIMS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIMS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -43,6 +46,9 @@
 		8F0CD4361CB737F500615490 /* MIMSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMSTests.swift; sourceTree = "<group>"; };
 		8F0CD4381CB737F500615490 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F0CD4421CB7388300615490 /* DatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		8F1E0F541CC1EC8300FE92EB /* ParseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseTests.swift; sourceTree = "<group>"; };
+		9A0936321920F00E79D26BFC /* Pods-MIMS-MIMSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MIMS-MIMSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MIMS-MIMSTests/Pods-MIMS-MIMSTests.release.xcconfig"; sourceTree = "<group>"; };
+		AEEEE63171CFDE88209FCF6B /* Pods-MIMS-MIMSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MIMS-MIMSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MIMS-MIMSTests/Pods-MIMS-MIMSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FF0E630A478D07FBDAE4EC4D /* Pods-MIMS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MIMS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MIMS/Pods-MIMS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -59,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6787431709933676BEAB7178 /* Pods_MIMS_MIMSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				7CB677F43484CB2D4FB2691F /* Pods_MIMS.framework */,
+				14CE67DC1A201621FFADB68E /* Pods_MIMS_MIMSTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,6 +120,7 @@
 			children = (
 				8F0CD4361CB737F500615490 /* MIMSTests.swift */,
 				8F0CD4381CB737F500615490 /* Info.plist */,
+				8F1E0F541CC1EC8300FE92EB /* ParseTests.swift */,
 			);
 			path = MIMSTests;
 			sourceTree = "<group>";
@@ -130,6 +139,8 @@
 			children = (
 				FF0E630A478D07FBDAE4EC4D /* Pods-MIMS.debug.xcconfig */,
 				084498F36BD44B8D1239DB17 /* Pods-MIMS.release.xcconfig */,
+				AEEEE63171CFDE88209FCF6B /* Pods-MIMS-MIMSTests.debug.xcconfig */,
+				9A0936321920F00E79D26BFC /* Pods-MIMS-MIMSTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -161,9 +172,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8F0CD43E1CB737F500615490 /* Build configuration list for PBXNativeTarget "MIMSTests" */;
 			buildPhases = (
+				8D58C52257848233918F6848 /* 📦 Check Pods Manifest.lock */,
 				8F0CD42E1CB737F500615490 /* Sources */,
 				8F0CD42F1CB737F500615490 /* Frameworks */,
 				8F0CD4301CB737F500615490 /* Resources */,
+				DECE51D828D7E8A873A40858 /* 📦 Embed Pods Frameworks */,
+				AF27B2382547E292EE637DF2 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -249,6 +263,36 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		8D58C52257848233918F6848 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AF27B2382547E292EE637DF2 /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MIMS-MIMSTests/Pods-MIMS-MIMSTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B924A65BF322AC9493707C52 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -279,6 +323,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MIMS/Pods-MIMS-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		DECE51D828D7E8A873A40858 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MIMS-MIMSTests/Pods-MIMS-MIMSTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -298,6 +357,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F0CD4371CB737F500615490 /* MIMSTests.swift in Sources */,
+				8F1E0F551CC1EC8300FE92EB /* ParseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +500,7 @@
 		};
 		8F0CD43F1CB737F500615490 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AEEEE63171CFDE88209FCF6B /* Pods-MIMS-MIMSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = MIMSTests/Info.plist;
@@ -452,6 +513,7 @@
 		};
 		8F0CD4401CB737F500615490 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A0936321920F00E79D26BFC /* Pods-MIMS-MIMSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = MIMSTests/Info.plist;

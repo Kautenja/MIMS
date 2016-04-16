@@ -1,0 +1,6 @@
+framework module Pods_MIMS_MIMSTests {
+  umbrella header "Pods-MIMS-MIMSTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

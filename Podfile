@@ -17,4 +17,8 @@ configuration.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODU
   end
 end
 
+target "MIMSTests" do
+pod 'Parse'
+end
+
 end

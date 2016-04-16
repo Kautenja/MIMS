@@ -14,28 +14,28 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-//        let newUser = AdminUser()
-//        newUser["username"] = "pbush27"
-//        newUser["email"] = "pmb0015@auburn.edu"
-//        newUser["name"] = "Patrick Bush"
-//        newUser.password = "TestPass"
-//        newUser.signUpInBackgroundWithBlock { (success, error) in
-//            if success && error == nil {
-//                print("Saved")
-//            }
-//        }
+        let newUser = MIMSUser()
+        newUser["username"] = "pbush28"
+        newUser["email"] = "pmb0018@auburn.edu"
+        newUser["name"] = "Patrick Bush"
+        newUser.password = "TestPass"
+        newUser.signUpInBackgroundWithBlock { (success, error) in
+            if success && error == nil {
+                print("Saved")
+            }
+        }
     }
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        let department = Department()
-        department.departmentName = "Yourmomology"
-        MIMSUser.currentUser()!.department = department
-        MIMSUser.currentUser()!.saveInBackgroundWithBlock { (success, error) in
-            if success && error == nil {
-                print("Success")
-            }
-        }
+//        let department = Department(withName: "Boobology")
+//        //department.departmentName = "Yourmomology"
+//        MIMSUser.currentUser()!.department = department
+//        MIMSUser.currentUser()!.saveInBackgroundWithBlock { (success, error) in
+//            if success && error == nil {
+//                print("Success")
+//            }
+//        }
         
         
     }

@@ -34,6 +34,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-MIMS-MIMSTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-MIMS.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -93,6 +98,11 @@
 			<true/>
 		</dict>
 		<key>E61CE3B6DFA1FE6B3E296965C76C0E10</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F5FCF6290BC8B179E4B9287117221135</key>
 		<dict>
 			<key>primary</key>
 			<true/>
