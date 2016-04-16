@@ -55,18 +55,18 @@ class ParseTreatmentTests: XCTestCase {
         super.tearDown()
     }
     
-    func testAddTreatment() {
-        print(user)
+    func testTreatmentPharmacist() {
         let treatment = Prescription()
         treatment.pharmacist = user
 //        self.patientRecord.treatments?.append(treatment)
 //        try! patientRecord.save()
         try! treatment.save()
-        print(treatment.pharmacist)
-        print(user)
         XCTAssert(treatment.pharmacist == user)
         
     }
+    
+
+    
     
     
 }
