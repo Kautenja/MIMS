@@ -17,6 +17,7 @@
 		8F0CD4371CB737F500615490 /* MIMSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4361CB737F500615490 /* MIMSTests.swift */; };
 		8F0CD4431CB7388300615490 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4421CB7388300615490 /* DatabaseManager.swift */; };
 		8F1E0F551CC1EC8300FE92EB /* ParseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1E0F541CC1EC8300FE92EB /* ParseTests.swift */; };
+		8FF2F8EF1CC5270000E207B3 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF2F8EE1CC5270000E207B3 /* SWRevealViewController.m */; };
 		D110DD7B38F1143E0AD23770 /* Pods_MIMS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB677F43484CB2D4FB2691F /* Pods_MIMS.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,9 @@
 		8F0CD4381CB737F500615490 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F0CD4421CB7388300615490 /* DatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		8F1E0F541CC1EC8300FE92EB /* ParseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseTests.swift; sourceTree = "<group>"; };
+		8FF2F8EC1CC526FF00E207B3 /* MIMS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MIMS-Bridging-Header.h"; sourceTree = "<group>"; };
+		8FF2F8ED1CC5270000E207B3 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		8FF2F8EE1CC5270000E207B3 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		9A0936321920F00E79D26BFC /* Pods-MIMS-MIMSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MIMS-MIMSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MIMS-MIMSTests/Pods-MIMS-MIMSTests.release.xcconfig"; sourceTree = "<group>"; };
 		AEEEE63171CFDE88209FCF6B /* Pods-MIMS-MIMSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MIMS-MIMSTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MIMS-MIMSTests/Pods-MIMS-MIMSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FF0E630A478D07FBDAE4EC4D /* Pods-MIMS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MIMS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MIMS/Pods-MIMS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -104,6 +108,7 @@
 		8F0CD4201CB737F500615490 /* MIMS */ = {
 			isa = PBXGroup;
 			children = (
+				8FF2F8EB1CC526E800E207B3 /* Resources */,
 				8F0CD4411CB7387000615490 /* Database */,
 				8F0CD4211CB737F500615490 /* AppDelegate.swift */,
 				8F0CD4231CB737F500615490 /* ViewController.swift */,
@@ -132,6 +137,16 @@
 				17A2638E1CC140F40092B027 /* ParseManager.swift */,
 			);
 			name = Database;
+			sourceTree = "<group>";
+		};
+		8FF2F8EB1CC526E800E207B3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8FF2F8ED1CC5270000E207B3 /* SWRevealViewController.h */,
+				8FF2F8EE1CC5270000E207B3 /* SWRevealViewController.m */,
+				8FF2F8EC1CC526FF00E207B3 /* MIMS-Bridging-Header.h */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		F4796DA59BEA207F27E1B7C5 /* Pods */ = {
@@ -347,6 +362,7 @@
 			files = (
 				8F0CD4241CB737F500615490 /* ViewController.swift in Sources */,
 				8F0CD4221CB737F500615490 /* AppDelegate.swift in Sources */,
+				8FF2F8EF1CC5270000E207B3 /* SWRevealViewController.m in Sources */,
 				17A2638F1CC140F40092B027 /* ParseManager.swift in Sources */,
 				8F0CD4431CB7388300615490 /* DatabaseManager.swift in Sources */,
 			);
@@ -479,10 +495,13 @@
 			baseConfigurationReference = FF0E630A478D07FBDAE4EC4D /* Pods-MIMS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MIMS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = UMLLovers.MIMS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MIMS/MIMS-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -491,10 +510,12 @@
 			baseConfigurationReference = 084498F36BD44B8D1239DB17 /* Pods-MIMS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = MIMS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = UMLLovers.MIMS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "MIMS/MIMS-Bridging-Header.h";
 			};
 			name = Release;
 		};
