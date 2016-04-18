@@ -29,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Treatment.registerSubclass()
         Prescription.registerSubclass()
         MIMSUser.registerSubclass()
+        //Surgery.registerSubclass()
+        //Immunization.registerSubclass()
 
         
         let configuration = ParseClientConfiguration {
@@ -38,9 +40,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         Parse.initializeWithConfiguration(configuration)
         
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let loginVC = storyboard.instantiateInitialViewController()
+        let dashbaordVC = storyboard.instantiateViewControllerWithIdentifier("MainEntryPointForHome")
+        
+        //Set the root view as the main view if the user is already logged in
+        if MIMSUser.currentUser() != nil && MIMSUser.currentUser()!.authenticated {
+            self.window?.rootViewController = dashbaordVC
+        } else {
+            //otherwise just present the loginVC
+            self.window?.rootViewController = loginVC
+        }
 
-//        Surgery.registerSubclass()
-//        Immunization.registerSubclass()
         
         IQKeyboardManager.sharedManager().enable = true
         return true

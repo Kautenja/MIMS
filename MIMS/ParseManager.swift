@@ -721,7 +721,7 @@ enum ParseErrorCodes: ErrorType {
 
 class ParseClient {
 
-    class func login(username: String, password: String, completion: (user: MIMSUser?, error: NSError?) ->()) throws {
+    class func login(username: String, password: String, completion: (error: NSError?) ->()) throws {
         guard username.characters.count >= 6 else {
             throw ParseErrorCodes.InvalidUsernameLength(message: "You didn't enter enough characters for your username")
         }
@@ -729,12 +729,24 @@ class ParseClient {
         guard password.characters.count >= 8 else {
             throw ParseErrorCodes.InvalidPasswordLength(message: "You didn't enter enough characters for your password")
         }
+        
+        self.loginUser(username, password: password, completion: completion)
 
-        MIMSUser.logInWithUsernameInBackground(username, password: password) { (user, error) in
-            if error == nil && user != nil {
-                completion(user: user! as? MIMSUser, error: nil)
+//        MIMSUser.logInWithUsernameInBackground(username, password: password) { (user, error) in
+//            if error == nil && user != nil {
+//                completion(user: user! as? MIMSUser, error: nil)
+//            } else {
+//                completion(user: nil, error: error!)
+//            }
+//        }
+    }
+    
+    private class func loginUser(name: String, password: String, completion:(error: NSError?) ->()) {
+        MIMSUser.logInWithUsernameInBackground(name, password: password) { (user, error) in
+            if user != nil && error == nil {
+                completion(error: nil)
             } else {
-                completion(user: nil, error: error!)
+                completion(error: error!)
             }
         }
     }
