@@ -29,17 +29,17 @@ class LoginViewController: UIViewController {
                 if error == nil {
                     self.performSegueWithIdentifier("PresentHomeFromLogin", sender: self)
                 } else {
-                    let alert = self.createAlert("Uh oh, we encountered an error!", errorMessage: error!.localizedDescription)
+                    let alert = createAlert("Uh oh, we encountered an error!", errorMessage: error!.localizedDescription)
                     self.presentViewController(alert, animated: true, completion: nil)
                 }
             })
         } catch ParseErrorCodes.InvalidPasswordLength(message: let message) {
-            let alert = self.createAlert("Uh oh, we encountered an error!", errorMessage: message)
+            let alert = createAlert("Uh oh, we encountered an error!", errorMessage: message)
             self.presentViewController(alert, animated: true, completion: nil)
             print(message)
         }
         catch ParseErrorCodes.InvalidUsernameLength(message: let message){
-            let alert = self.createAlert("Uh oh, we encountered an error!", errorMessage: message)
+            let alert = createAlert("Uh oh, we encountered an error!", errorMessage: message)
             self.presentViewController(alert, animated: true, completion: nil)
             print(message)
         }
@@ -47,12 +47,7 @@ class LoginViewController: UIViewController {
             print(error)
         }
     }
-    
-    func createAlert(message: String, errorMessage: String) -> UIAlertController {
-        let alert = UIAlertController(title: message, message: errorMessage, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .Destructive, handler: nil))
-        return alert
-    }
+
 
     /*
     // MARK: - Navigation

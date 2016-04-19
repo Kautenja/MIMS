@@ -751,7 +751,7 @@ class ParseClient {
         }
     }
     
-    class func logout(user: PFUser, completion: (success: Bool?, error: NSError?) ->()) {
+    class func logout(user: PFUser, completion: (success: Bool, error: NSError?) ->()) {
         guard MIMSUser.currentUser() != nil else {
             return
         }

@@ -91,7 +91,7 @@
         <!--Menu View Controller-->
         <scene sceneID="dnd-7P-ZMz">
             <objects>
-                <tableViewController storyboardIdentifier="MenuVC" title="Menu View Controller" id="uL8-3r-feo" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MenuVC" title="Menu View Controller" id="uL8-3r-feo" customClass="RevealViewTableViewController" customModule="MIMS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="uom-ap-KNy">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,7 +106,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YcX-am-9ix">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Dashboard Filled-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="YcX-am-9ix">
                                                     <rect key="frame" x="8" y="8" width="43" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="43" id="xz3-Pe-r07"/>
@@ -136,7 +136,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aS0-rU-ro9">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Heart Monitor Filled-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="aS0-rU-ro9">
                                                     <rect key="frame" x="8" y="8" width="43" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="43" id="OjX-7G-Ewh"/>
@@ -163,7 +163,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="44k-kj-fE7">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Appointment Reminders Filled-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="44k-kj-fE7">
                                                     <rect key="frame" x="8" y="8" width="43" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="43" id="mWd-OI-zM8"/>
@@ -190,7 +190,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Tfm-o9-9jK">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Administrator Male Filled-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="Tfm-o9-9jK">
                                                     <rect key="frame" x="8" y="8" width="43" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="43" id="UnI-hi-0ah"/>
@@ -217,13 +217,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l1g-qA-gsJ">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Close Window Filled-100.png" translatesAutoresizingMaskIntoConstraints="NO" id="l1g-qA-gsJ">
                                                     <rect key="frame" x="8" y="8" width="43" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="43" id="vKU-09-5gq"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pWt-Il-eKN">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Logout" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pWt-Il-eKN">
                                                     <rect key="frame" x="59" y="8" width="498" height="43"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -245,6 +245,9 @@
                             <outlet property="delegate" destination="uL8-3r-feo" id="vzG-xq-mcC"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="logoutCell" destination="El2-Qx-cIk" id="oYf-hT-M3a"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zif-P2-7if" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -253,7 +256,7 @@
         <!--Root View Controller-->
         <scene sceneID="01H-w9-8Lr">
             <objects>
-                <tableViewController id="ZWD-Go-TKi" sceneMemberID="viewController">
+                <tableViewController id="ZWD-Go-TKi" customClass="DashboardTableViewController" customModule="MIMS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="nuk-Op-Quv">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -318,6 +321,13 @@
             <point key="canvasLocation" x="1474" y="1157"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Administrator Male Filled-100.png" width="100" height="100"/>
+        <image name="Appointment Reminders Filled-100.png" width="100" height="100"/>
+        <image name="Close Window Filled-100.png" width="100" height="100"/>
+        <image name="Dashboard Filled-100.png" width="100" height="100"/>
+        <image name="Heart Monitor Filled-100.png" width="100" height="100"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="whc-Ia-u6F"/>
     </inferredMetricsTieBreakers>

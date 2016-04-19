@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Surgery.registerSubclass()
         //Immunization.registerSubclass()
 
+        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().barStyle = UIBarStyle.BlackOpaque
         
         let configuration = ParseClientConfiguration {
             $0.applicationId = "com.mims.umllovers.appID199384755"
