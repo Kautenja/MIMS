@@ -9,7 +9,15 @@
 import Foundation
 import Parse
 
-
+//MARK: Patient Record Class
+/**
+ *  A class for the Patient record
+ *  Member variables
+ *  patient: Patient -- the corresponding patient
+ *  appointments: [Appointment] -- the appointments scheduled for the patient
+ *  treatments: [Treatment] -- the treatments the patient has had or has scheduled
+ *  comments: [String] -- any comments on the patient file
+ */
 class PatientRecord: PFObject, PFSubclassing {
     
     var patient: Patient? {
@@ -777,7 +785,27 @@ class ParseClient {
         })
     }
     
-    class func queryPatients(key: String, value: AnyObject, completion: (patients: [PatientRecord]?, error: NSError?) ->()) {
-        //let query = PFQuery(className: <#T##String#>)
+    class func queryPatients(key: String, value: String, completion: (patients: [Patient]?, error: NSError?) ->()) {
+        let query = PFQuery(className: "Patient")
+        query.whereKey(key, hasPrefix: value)
+        query.findObjectsInBackgroundWithBlock { (patients, error) in
+            if patients != nil && error == nil {
+                completion(patients: patients as? [Patient], error: nil)
+            } else {
+                completion(patients: nil, error: error!)
+            }
+        }
+    }
+    
+    class func queryPatientRecors(key: String, value: AnyObject, completion: (patientRecords: [PatientRecord]?, error: NSError?) ->()) {
+        let query = PFQuery(className: "Patient Record")
+        query.whereKey(key, equalTo: value)
+        query.findObjectsInBackgroundWithBlock { (patientRecords, error) in
+            if patientRecords != nil && error == nil {
+                completion(patientRecords: patientRecords as? [PatientRecord], error: nil)
+            } else {
+                completion(patientRecords: nil, error: error!)
+            }
+        }
     }
 }
