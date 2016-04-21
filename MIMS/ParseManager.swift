@@ -17,6 +17,10 @@ import Parse
  *  appointments: [Appointment] -- the appointments scheduled for the patient
  *  treatments: [Treatment] -- the treatments the patient has had or has scheduled
  *  comments: [String] -- any comments on the patient file
+ *  measurements: [Measurements] -- measurements taken on the patient
+ *  scans: [Scans] -- scans taken on the patient
+ *  tests: [Tests] -- tests taken on the patient
+ *  Parse Class Name: "Patient Record"
  */
 class PatientRecord: PFObject, PFSubclassing {
     
@@ -25,7 +29,9 @@ class PatientRecord: PFObject, PFSubclassing {
             return self["patient"] as? Patient
         }
         set {
-            self["patient"] = newValue
+            if newValue != nil {
+                self["patient"] = newValue!
+            }
         }
     }
     
@@ -33,39 +39,80 @@ class PatientRecord: PFObject, PFSubclassing {
         get {
             return self["appointments"] as? [Appointment]
         }
-        set {
-            self["appointments"] = newValue
-        }
+        set {}
     }
     
     var treatments: [Treatment]? {
         get {
             return self["treatments"] as? [Treatment]
         }
-        set {
-            self["treatments"] = newValue
-        }
+        set {}
     }
     
     var comments: [String]? {
         get {
             return self["comments"] as? [String]
         }
-        set {
-            self["comments"] = newValue
-        }
+        set{}
     }
     
     //measurements
+    var measurements: Measurement? {
+        get {
+            return self["measurements"] as? Measurement
+        }
+        set {
+            if newValue != nil {
+                self["measurements"] = newValue!
+            }
+        }
+    }
+    
+    var conditions: Condition? {
+        get {
+            return self["conditions"] as? Condition
+        }
+        set{
+            if newValue != nil {
+                self["conditions"] = newValue!
+            }
+        }
+    }
     
     //scans
     
+    
     //tests
+    
+    func addAppointment(newAppointment: Appointment) {
+        self.appointments?.append(newAppointment)
+    }
+    
+    func addComment(newComment: String) {
+        self.comments?.append(newComment)
+    }
+    
+    func addNewTreatment(newTreatment: Treatment) {
+        self.treatments?.append(newTreatment)
+    }
+    
+    
     class func parseClassName() -> String {
         return "Patient Record"
     }
 }
 
+enum FinanceErrors: ErrorType {
+    case InvalidBalance
+    case InvalidPaymentInfo
+}
+
+//MARK: Financial Information Class
+/**
+ *  paymentInfo: String -- the patient's payment info
+ *  outstandingBalance: Int -- the patient's outstanding balance
+ *  Parse Class Name: "Financial Information"
+ */
 class FinancialInformation: PFObject, PFSubclassing {
     
     var paymentInfo: String? {
@@ -73,7 +120,9 @@ class FinancialInformation: PFObject, PFSubclassing {
             return self["paymentInfo"] as? String
         }
         set {
-            self["paymentInfo"] = newValue
+            if newValue != nil && newValue != "" {
+                self["paymentInfo"] = newValue!
+            }
         }
     }
     
@@ -82,54 +131,186 @@ class FinancialInformation: PFObject, PFSubclassing {
             return self["outstandingBalance"] as? Int
         }
         set {
-            self["outstandingBalance"] = newValue
+            if newValue != nil && newValue >= 0 {
+                self["outstandingBalance"] = newValue!
+            }
         }
     }
+    
+    /**
+     A convenience init with just payment info. Sets default balance to 0
+     
+     - parameter paymentInfo: the new payment info
+     
+     - returns: A new FinancialInformation object
+     */
+    convenience init(initWithPaymentInfo paymentInfo: String) throws {
+        self.init()
+        if paymentInfo == "" {
+            throw FinanceErrors.InvalidPaymentInfo
+        }
+        self.paymentInfo = paymentInfo
+        self.outstandingBalance = 0
+    }
+    
+    /**
+     A conveneince init with all info
+     
+     - parameter paymentInfo: The new payment info
+     - parameter balance:     the outstanding balance
+     
+     - returns: A new FinancialInformation object
+     */
+    convenience init(initWithAllInfo paymentInfo: String, balance: Int) throws {
+        self.init()
+        guard paymentInfo != "" else {
+            throw FinanceErrors.InvalidPaymentInfo
+        }
+        guard balance >= 0 else {
+            throw FinanceErrors.InvalidBalance
+        }
+        self.paymentInfo = paymentInfo
+        self.outstandingBalance = balance
+    }
+    
     class func parseClassName() -> String {
         return "Financial Information"
     }
 }
 
+enum AddressErrors: ErrorType {
+    case InvalidStreet
+    case InvalidCity
+    case InvalidState
+    case InvalidZip
+    case InvalidAddress
+}
+//MARK: Address Class
+/**
+ *  Address class with the patient's address
+ *  private street: String -- the street name and number
+ *  private city: String -- the city
+ *  private state: String -- the state
+ *  private zipCode: String -- the zip code
+ *  description: String -- the description of the address
+ *  Parse Class Name: "Address"
+ */
 class Address: PFObject, PFSubclassing {
     
-    var street: String? {
+    private var street: String? {
         get {
             return self["street"] as? String
         }
         set {
-            self["street"] = newValue
+            self["street"] = newValue!
         }
     }
     
-    var city: String? {
+    private var city: String? {
         get {
             return self["city"] as? String
         }
         set {
-            self["city"] = newValue
+            self["city"] = newValue!
         }
     }
     
-    var state: String? {
+    private var state: String? {
         get {
             return self["state"] as? String
         }
         set {
-            self["state"] = newValue
+            self["state"] = newValue!
         }
     }
     
-    var zipCode: String? {
+    private var zipCode: String? {
         get {
             return self["zip"] as? String
         }
         set {
-            self["zip"] = newValue
+            self["zip"] = newValue!
         }
     }
     
     override var description: String {
-       return "\(street)\n\(city), \(state) \(zipCode)"
+       return "\(street!)\n\(city!), \(state!) \(zipCode!)"
+    }
+    
+    /**
+     Add a complete new address for the patient
+     
+     - parameter street: the new street name and number
+     - parameter city:   the new city name
+     - parameter state:  the new state name
+     - parameter zip:    the new zip
+     
+     - throws:   An error if there is invalid input
+     */
+    func newAddress(street: String, city: String, state: String, zip: String) throws {
+        guard street != "" && city != "" && state != "" && zip != "" else {
+            throw AddressErrors.InvalidAddress
+        }
+        self.street = street
+        self.city = city
+        self.state = state
+        self.zipCode = zip
+    }
+    
+    /**
+     Change the street name and number
+     
+     - parameter street: the new street name and number
+     
+     - throws:   An error if the street is invalid
+     */
+    func changeStreet(street: String) throws {
+        guard street != "" else {
+            throw AddressErrors.InvalidStreet
+        }
+        self.street = street
+    }
+    
+    /**
+     Change the state
+     
+     - parameter state: the new state name
+     
+     - throws:  An error if the state is invalid
+     */
+    func changeState(state: String) throws {
+        guard state != "" else {
+            throw AddressErrors.InvalidState
+        }
+        self.state = state
+    }
+    
+    /**
+     Change the city
+     
+     - parameter city: the new city name
+     
+     - throws: An error if the city is invalid
+     */
+    func changeCity(city: String) throws {
+        guard city != "" else {
+            throw AddressErrors.InvalidCity
+        }
+        self.city = city
+    }
+    
+    /**
+     Change the zip code
+     
+     - parameter zip: the new zipcode
+     
+     - throws: An error if the zip in invalid
+     */
+    func changeZip(zip: String) throws {
+        guard zip != "" else {
+            throw AddressErrors.InvalidZip
+        }
+        self.zipCode = zip
     }
     
     class func parseClassName() -> String {
@@ -137,6 +318,19 @@ class Address: PFObject, PFSubclassing {
     }
 }
 
+enum InsuranceError: ErrorType {
+    case InvalidInsuranceInformation
+    case InvalidExpirationDate
+}
+//MARK: Insurance Info Class
+/**
+ *  Class for maintaining the patient's insurance info
+ *  expirationData: NSDate -- the expiration date for the user
+ *  memberID: String -- the id for the patient
+ *  groupID: String -- the group ID for the patient
+ *  copay: Int -- the copay %
+ *  Parse Class Name: "Insurance Information"
+ */
 class InsuranceInfo: PFObject, PFSubclassing {
     
     var expirationDate: NSDate? {
@@ -144,7 +338,9 @@ class InsuranceInfo: PFObject, PFSubclassing {
             return self["expiryDate"] as? NSDate
         }
         set {
-            self["expiryDate"] = newValue
+            if newValue != nil {
+                self["expiryDate"] = newValue!
+            }
         }
     }
     
@@ -153,7 +349,9 @@ class InsuranceInfo: PFObject, PFSubclassing {
             return self["id"] as? String
         }
         set {
-            self["id"] = newValue
+            if newValue != nil && newValue != "" {
+                self["id"] = newValue!
+            }
         }
     }
     
@@ -162,21 +360,44 @@ class InsuranceInfo: PFObject, PFSubclassing {
             return self["groupID"] as? String
         }
         set {
-            self["groupID"] = newValue
+            if newValue != nil && newValue != "" {
+                self["groupID"] = newValue!
+            }
         }
     }
+    
     
     var copay: Int? {
         get {
             return self["copay"] as? Int
         }
         set {
-            self["copay"] = newValue
+            if newValue != nil && newValue >= 0 {
+                self["copay"] = newValue!
+            }
         }
     }
     
-    convenience init(initWith expiryDate: NSDate, memID: String, grpID: String, amount: Int) {
+    /**
+     Convenience init for adding new insurance information
+     
+     - parameter expiryDate: The insurance policy's expiration date
+     - parameter memID:      The insurance policy's member ID
+     - parameter grpID:      The insurance policy's group ID
+     - parameter amount:     The insurance policy's copay %
+     
+     - throws:  An error if the information is invalid
+     
+     - returns: a new InsuranceInformation object
+     */
+    convenience init(initWith expiryDate: NSDate, memID: String, grpID: String, amount: Int) throws {
         self.init()
+        guard memID != "" && grpID != "" && amount >= 0 else {
+            throw InsuranceError.InvalidInsuranceInformation
+        }
+        guard NSDate() >= expiryDate else {
+            throw InsuranceError.InvalidExpirationDate
+        }
         self.expirationDate = expiryDate
         self.memberID = memID
         self.groupID = grpID
@@ -189,7 +410,25 @@ class InsuranceInfo: PFObject, PFSubclassing {
     }
 }
 
+enum PatientErrors: ErrorType {
+    case InvalidBrthday
+    case InvalidSSN
+    case InvalidName
+}
 
+//MARK: Patient Class
+/**
+ A class that holds patient metadata information
+ *  name: String -- The name of the patient
+ *  married: Bool -- The marriage status (1 is married, 0 is single)
+ *  gender: Bool -- The gender of the patient (1 is Male, 0 is female)
+ *  birthday: NSDate -- the birthday of the patient
+ *  ssn: String -- the SSN of the patient
+ *  address: Address -- the patient's address
+ *  insurance: Insurance -- the patient's insurance info
+ *  financials: FinancialInformation -- the patient's financial info
+ *  Parse Class Name: "Patient"
+ */
 class Patient: PFObject, PFSubclassing {
     
     var name: String? {
@@ -198,7 +437,7 @@ class Patient: PFObject, PFSubclassing {
         }
         set {
             if newValue?.characters.count > 0 {
-                self["name"] = newValue
+                self["name"] = newValue!
             }
         }
     }
@@ -208,7 +447,9 @@ class Patient: PFObject, PFSubclassing {
             return self["maritialStatus"] as? Bool
         }
         set {
-            self["maritialStatus"] = newValue
+            if newValue != nil {
+                self["maritialStatus"] = newValue!
+            }
         }
     }
     
@@ -218,7 +459,9 @@ class Patient: PFObject, PFSubclassing {
             return self["gender"] as? Bool
         }
         set {
-            self["gender"] = newValue
+            if newValue != nil {
+                self["gender"] = newValue!
+            }
         }
     }
     
@@ -227,7 +470,9 @@ class Patient: PFObject, PFSubclassing {
             return self["birthday"] as? NSDate
         }
         set {
-            self["birthday"] = newValue
+            if newValue != nil && newValue <= NSDate() {
+                self["birthday"] = newValue!
+            }
         }
     }
     
@@ -237,7 +482,7 @@ class Patient: PFObject, PFSubclassing {
         }
         set {
             if newValue?.characters.count == 9 {
-                self["ssn"] = newValue
+                self["ssn"] = newValue!
             }
         }
     }
@@ -247,7 +492,9 @@ class Patient: PFObject, PFSubclassing {
             return self["address"] as? Address
         }
         set {
-            self["address"] = newValue
+            if newValue != nil {
+                self["address"] = newValue!
+            }
         }
     }
     
@@ -256,7 +503,9 @@ class Patient: PFObject, PFSubclassing {
             return self["insuranceInfo"] as? InsuranceInfo
         }
         set {
-            self["insuranceInfo"] = newValue
+            if newValue != nil {
+                self["insuranceInfo"] = newValue!
+            }
         }
     }
     
@@ -265,17 +514,112 @@ class Patient: PFObject, PFSubclassing {
             return self["financialData"] as? FinancialInformation
         }
         set {
-            self["financialData"] = newValue
+            if newValue != nil {
+                self["financialData"] = newValue!
+            }
         }
     }
     
-
+    /**
+     A convenience init for a new patient. Requires address, insurance info, and financeData
+     
+     - parameter name:          The patient's name
+     - parameter married:       The patient's marriage status
+     - parameter gender:        The patient's gender
+     - parameter ssn:           The patient's SSN
+     - parameter address:       The patient's address
+     - parameter insuranceInfo: The patient's insurance info
+     - parameter financeData:   The patient's finance data
+     
+     - returns:
+     */
+    convenience init(initWithInfo name: String, married: Bool, gender: Bool, birthday: NSDate, ssn: String, address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation) throws {
+        guard birthday <= NSDate() else {
+            throw PatientErrors.InvalidBrthday
+        }
+        guard ssn.characters.count == 9 else {
+            throw PatientErrors.InvalidSSN
+        }
+        guard name.characters.count > 0 else {
+            throw PatientErrors.InvalidName
+        }
+        
+        self.init()
+        self.name = name
+        self.married = married
+        self.gender = gender
+        self.birthday = birthday
+        self.ssn = ssn
+        self.address = address
+        self.insurance = insuranceInfo
+        self.financials = financeData
+    }
+    
+    /**
+     A convenience init for a new patient. Requires address
+     Use this init for patient's without insurance
+     
+     - parameter name:          The patient's name
+     - parameter married:       The patient's marriage status
+     - parameter gender:        The patient's gender
+     - parameter ssn:           The patient's SSN
+     - parameter address:       The patient's address
+     - parameter insuranceInfo: The patient's insurance info
+     - parameter financeData:   The patient's finance data
+     
+     - returns:
+     */
+    convenience init(initWithLessInfo name: String, married: Bool, gender: Bool, birthday: NSDate, ssn: String, address: Address) throws {
+        guard birthday <= NSDate() else {
+            throw PatientErrors.InvalidBrthday
+        }
+        guard ssn.characters.count == 9 else {
+            throw PatientErrors.InvalidSSN
+        }
+        guard name.characters.count > 0 else {
+            throw PatientErrors.InvalidName
+        }
+        self.init()
+        self.name = name
+        self.married = married
+        self.gender = gender
+        self.ssn = ssn
+        self.address = address
+    }
     
     class func parseClassName() -> String {
         return "Patient"
     }
     
 }
+
+enum Departments: String {
+    case Surgery = "Surgery"
+    case ER = "ER"
+    case Anesthetics = "Anesthetics"
+    case Oncology = "Oncology"
+    case Cardiology = "Cardiology"
+    case CriticalCare = "CriticalCare"
+    case Imaging = "Imaging"
+    case ENT = "ENT"
+    case Gynecology = "Gynecology"
+    case Hematology = "Hematology"
+    case Laboratory = "Laboratory"
+    case Maternity = "Maternity"
+    case Pediatrics = "Pediatrics"
+    case Pharmacy = "Pharmacy"
+    case Radiology = "Radiology"
+}
+
+enum DepartmentErrorCodes: ErrorType {
+    case InvalidDepartmentName
+}
+//MARK: Department Class
+/**
+ Class for departments within the MIMS
+ *  departmentName: String -- the name of the department
+ *  Parse Class Name: "Department"
+ */
 class Department: PFObject, PFSubclassing {
     var departmentName: String? {
         get {
@@ -283,14 +627,24 @@ class Department: PFObject, PFSubclassing {
         }
         
         set {
-            self["name"] = newValue
+            self["name"] = newValue!
         }
     }
     
-    
-    convenience init(withName name: String) {
+    /**
+     A conveneince init with the department's name
+     
+     - parameter name: The department's name
+     
+     - returns:
+     */
+    convenience init(withName name: String) throws {
         self.init()
-        self.departmentName = name
+        if let department = Departments(rawValue: name) {
+            self.departmentName = department.rawValue
+        } else {
+            throw DepartmentErrorCodes.InvalidDepartmentName
+        }
     }
     
     class func parseClassName() -> String {
@@ -298,16 +652,29 @@ class Department: PFObject, PFSubclassing {
     }
 }
 
+//MARK: Institution Class
+/**
+ *  A class for the institutions a user can belong to
+ *  institutionName: String -- the instiution name
+ *  Parse Class Name - "Institution"
+ */
 class Institution: PFObject, PFSubclassing {
     var institutionName: String? {
         get {
             return self["name"] as? String
         }
         set {
-            self["name"] = newValue
+            self["name"] = newValue!
         }
     }
     
+    /**
+     Convenience init with the new institution name
+     
+     - parameter name: The institution name
+     
+     - returns:
+     */
     convenience init(initWithName name: String) {
         self.init()
         self.institutionName = name
@@ -318,16 +685,13 @@ class Institution: PFObject, PFSubclassing {
     }
 }
 
+//MARK: Treatment Abstract Class
+/**
+ An abstract class that treatments can inheirt from
+ *  timeCreated: NSDate -- the time the treatment was created
+ *  Parse Class Name: "Treatment"
+ */
 class Treatment: PFObject, PFSubclassing {
-
-//    dynamic var treatments: [Treatment]? {
-//        get {
-//            return self["treatments"] as? [Treatment]
-//        }
-//        set {
-//            self["treatments"] = newValue
-//        }
-//    }
     
     var timeCreated: NSDate? {
         get {
@@ -340,6 +704,14 @@ class Treatment: PFObject, PFSubclassing {
     }
 }
 
+//MARK: Treatment subclass Prescription
+/**
+ A class representing the precriptions filled
+ *  timeReceived: NSDate -- the time the prescription was received by the pharmacist
+ *  timeFilled: NSDate -- the time the prescription was done being filled
+ *  pharmacist: MIMSUser -- the pharmacist who filled the script
+ *  scripts: [String] -- the prescription(s) filled
+ */
 class Prescription: Treatment {
     
     var timeReceived: NSDate? {
@@ -347,7 +719,9 @@ class Prescription: Treatment {
             return self["timeReceived"] as? NSDate
         }
         set {
-            self["timeReceived"] = newValue
+            if newValue != nil {
+                self["timeReceived"] = newValue!
+            }
         }
     }
     
@@ -356,7 +730,9 @@ class Prescription: Treatment {
             return self["timeFilled"] as? NSDate
         }
         set {
-            self["timeFilled"] = newValue
+            if newValue != nil {
+                self["timeFilled"] = newValue!
+            }
         }
     }
     
@@ -365,33 +741,123 @@ class Prescription: Treatment {
             return self["pharmacist"] as? MIMSUser
         }
         set {
-            self["pharmacist"] = newValue
+            if newValue != nil {
+                self["pharmacist"] = newValue!
+            }
         }
     }
+    
+    var scripts: [String]? {
+        get {
+            return self["name"] as? [String]
+        }
+        set {}
+    }
+    
+    var fillStatus: Bool? {
+        get {
+            return self["fillStatus"] as? Bool
+        }
+        set {
+            if newValue != nil {
+                self["fillStatus"] = newValue!
+            }
+        }
+    }
+    
+    convenience init(withPharmacist pharmacist: MIMSUser, newScript: String) {
+        self.init()
+        self.pharmacist = pharmacist
+        self.scripts = [newScript]
+        self.fillStatus = false
+    }
+    
+    func addPrescriptionName(name: String) {
+        self.scripts?.append(name)
+    }
+    
+    func changePharmacist(newPharmacist: MIMSUser) {
+        self.pharmacist = newPharmacist
+    }
+    
+    func markPrescriptionAsFilled() {
+        self.timeFilled = NSDate()
+        self.fillStatus = true
+    }
+    
+    func markPrescriptionAsFilled(withDate date: NSDate) {
+        self.timeFilled = date
+        self.fillStatus = true
+    }
+    
+    func markPrescriptionAsReceived() {
+        self.timeReceived = NSDate()
+    }
+    
+    func markPrescriptionAsReceived(withDate date: NSDate) {
+        self.timeReceived = date
+    }
+
 }
 
+//MARK: Surgery class
+/**
+ *  attendingSurgeon: MIMSUser -- the surgeon working on the patient
+ */
 class Surgery: Treatment {
     var attendingSurgeon: MIMSUser? {
         get {
             return self["attendingSurgeon"] as? MIMSUser
         }
         set {
-            self["attendingSurgeon"] = newValue
+            if newValue != nil {
+                self["attendingSurgeon"] = newValue!
+            }
         }
+    }
+    
+    convenience init(withSurgeon surgeon: MIMSUser) {
+        self.init()
+        self.attendingSurgeon = surgeon
     }
 }
 
+//MARK: Immunization Class
+/**
+ *  immunizationTypes: String -- the types of immunizations received
+ */
 class Immunization: Treatment {
-    var immunizationTypes: String? {
+    var immunizationTypes: [String]? {
         get {
-            return self["immunizations"] as? String
+            return self["immunizations"] as? [String]
         }
-        set {
-            self["immunizations"] = newValue
-        }
+        set {}
+    }
+    
+    convenience init(withImmunizationType immunization: String) {
+        self.init()
+        self.immunizationTypes = [immunization]
+    }
+    
+    func addNewImmunization(immunization: String) {
+        self.immunizationTypes?.append(immunization)
     }
 }
 
+//MARK: Measurement Class
+/**
+ A class for the various measurements that can be taken
+ *  timeTaken: NSDate -- the time the measurement was taken
+ *  timeCreated: NSDate -- the time the measurement request was created
+ *  timeModified: NSDate -- the time a measurement was last modified
+ *  private systolic: Int -- a patient's systolic 
+ *  private diastolic: Int -- a patient's diastolic
+ *  bloodPressure: String -- the patient's blood pressure, a computed value
+ *  private inches: Int -- the patient's inches
+ *  private feet: Int -- the patient's feet
+ *  height: String -- the height of the patient, a computed value
+ *  Parse Class Name: "Measurement"
+ */
 class Measurement: PFObject, PFSubclassing {
     
     var timeTaken: NSDate? {
@@ -478,11 +944,25 @@ class Measurement: PFObject, PFSubclassing {
         }
     }
     
+    /**
+     Add a new blood pressure for a patient. These should never be  modified seperately, 
+     and always be added in this manner to ensure accurate measurements.
+     
+     - parameter systolic:  The patient's new systolic number
+     - parameter diastolic: The patient's new diastolic number
+     */
     func addNewBloodPressure(systolic: Int, diastolic: Int) {
         self.systolic = systolic
         self.diastolic = diastolic
     }
     
+    /**
+     Add a new height for the patient. These should also never be modified seperately, 
+     and always be added in this manner to ensure accurate measurements.
+     
+     - parameter feet:   The patient's height in feet
+     - parameter inches: The patient's height in inches
+     */
     func addHeight(feet: Int, inches: Int) {
         self.feet = feet
         self.inches = inches
@@ -502,6 +982,13 @@ struct Disease {
     var description: String {
         return disease.rawValue
     }
+    
+    init(withDiseaseName name: String) throws {
+        guard let newDisease = Disease(rawValue: name) else {
+            throw ConditionErrors.InvalidDisease
+        }
+        self.disease = newDisease
+    }
 
 }
 
@@ -515,6 +1002,13 @@ struct Allergy {
     var description: String {
         return allergy.rawValue
     }
+    
+    init(withAllergyName name: String) throws {
+        guard let newAllergy = Allergies(rawValue: name) else {
+            throw ConditionErrors.InvalidAllergy
+        }
+        self.allergy = newAllergy
+    }
 }
 
 struct Disorder {
@@ -527,6 +1021,13 @@ struct Disorder {
     var description: String {
         return disorder.rawValue
     }
+    
+    init(withDisorderName name: String) throws {
+        guard let newDisorder = Disorders(rawValue: name) else {
+            throw ConditionErrors.InvalidDisorder
+        }
+        self.disorder = newDisorder
+    }
 }
 
 struct CauseOfDeath {
@@ -538,10 +1039,32 @@ struct CauseOfDeath {
     var description: String {
         return causeOfDeath.rawValue
     }
+    
+    init(withCauseOfDeath cod: String) throws {
+        guard let newCOD = Cause(rawValue: cod) else {
+            throw ConditionErrors.InvalidCOD
+        }
+        self.causeOfDeath = newCOD
+    }
 
 }
 
+enum ConditionErrors: ErrorType {
+    case InvalidDisease
+    case InvalidAllergy
+    case InvalidCOD
+    case InvalidDisorder
+}
 
+//MARK: Condition Class
+/**
+ A class that will contain all of the patient's conditions, including
+ diseases, allergies, disorders, and, if applicable, the cause of death.
+ *
+ *  timeAdded: The time the /first/ condition of the patient was added
+ *  timeUpdated: The time the condition's file was most recently updated
+ *  disease: [String] -- any diseases the patient has been diagnosed with
+ */
 class Condition: PFObject, PFSubclassing {
     
     var timeAdded: NSDate? {
@@ -558,35 +1081,91 @@ class Condition: PFObject, PFSubclassing {
         get {
             return self["disease"] as? [String]
         }
-        set {
-            
-        }
+        set {}
     }
     
     var allergies: [String]? {
         get {
             return self["allergies"] as? [String]
         }
-        set {
-            
-        }
+        set {}
     }
     
     var disorders: [String]? {
         get {
             return self["disorders"] as? [String]
         }
-        set {
-            
-        }
+        set {}
     }
     
     var causeOfDeath: String? {
         get {
             return self["causeOfDeath"] as? String
         }
-        set {
-            self["causeOfDeath"] = newValue
+        set {}
+    }
+    
+    /**
+     Method to add a new disease to the patient record
+     
+     - parameter newDisease: The new disease name
+     
+     - throws: An error if the disease name is invalid
+     */
+    func addDisease(newDisease: String) throws {
+        do {
+            let disease = try Disease(withDiseaseName: newDisease)
+            self.disease?.append(disease.description)
+        } catch ConditionErrors.InvalidDisease {
+            throw ConditionErrors.InvalidDisease
+        }
+    }
+    
+    /**
+     Method to add a new allergy to the patient's record
+     
+     - parameter newAllergy: The new allergy
+     
+     - throws: An error if the allergy name is invalid
+     */
+    func addAllergy(newAllergy: String) throws {
+        do {
+            let allergy = try Allergy(withAllergyName: newAllergy)
+            self.allergies?.append(allergy.description)
+        } catch ConditionErrors.InvalidAllergy {
+            throw ConditionErrors.InvalidAllergy
+        }
+    }
+    
+    /**
+     Method to add a new disorder to the patient's record
+     
+     - parameter newDisorder: The new disorder
+     
+     - throws: An error if the disorder name in invalid
+     */
+    func addDisorder(newDisorder: String) throws {
+        do {
+            let disorder = try Disorder(withDisorderName: newDisorder)
+            self.disorders?.append(disorder.description)
+        } catch ConditionErrors.InvalidDisorder {
+            throw ConditionErrors.InvalidDisorder
+        }
+    }
+    
+    /**
+     Method to add a new cause of death to the patient's record
+     
+     - parameter cause: The new cause of death
+     
+     - throws: An error if the ause of death is invalid
+     */
+    func addCauseOfDeath(cause: String) throws {
+        do {
+            let causeOfDeath = try CauseOfDeath(withCauseOfDeath: cause)
+            self.causeOfDeath = causeOfDeath.description
+        } catch ConditionErrors.InvalidCOD {
+            throw ConditionErrors.InvalidCOD
         }
     }
     
@@ -773,8 +1352,8 @@ class ParseClient {
     }
     
     class func queryUsers(key: String, value: AnyObject, completion: (users: [MIMSUser]?, error: NSError?) ->()) throws {
-        guard key.characters.count > 0 else {
-            throw ParseErrorCodes.InvalidKey(message: "An invalid key was sent")
+        guard key.characters.count > 0 && key != "" else {
+            throw ParseErrorCodes.InvalidKey(message: "An invalid key/value was sent")
         }
         let query = MIMSUser.query()
         query?.whereKey(key, equalTo: value)
@@ -785,7 +1364,10 @@ class ParseClient {
         })
     }
     
-    class func queryPatients(key: String, value: String, completion: (patients: [Patient]?, error: NSError?) ->()) {
+    class func queryPatients(key: String, value: String, completion: (patients: [Patient]?, error: NSError?) ->()) throws {
+        guard value != "" && key != "" else {
+            throw ParseErrorCodes.InvalidKey(message: "An invalid key/value was sent")
+        }
         let query = PFQuery(className: "Patient")
         query.whereKey(key, hasPrefix: value)
         query.findObjectsInBackgroundWithBlock { (patients, error) in
@@ -797,7 +1379,7 @@ class ParseClient {
         }
     }
     
-    class func queryPatientRecors(key: String, value: AnyObject, completion: (patientRecords: [PatientRecord]?, error: NSError?) ->()) {
+    class func queryPatientRecords(key: String, value: AnyObject, completion: (patientRecords: [PatientRecord]?, error: NSError?) ->()) {
         let query = PFQuery(className: "Patient Record")
         query.whereKey(key, equalTo: value)
         query.findObjectsInBackgroundWithBlock { (patientRecords, error) in

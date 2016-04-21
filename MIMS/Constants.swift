@@ -13,3 +13,14 @@ func createAlert(message: String, errorMessage: String) -> UIAlertController {
     alert.addAction(UIAlertAction(title: "Dismiss", style: .Destructive, handler: nil))
     return alert
 }
+
+
+public func ==(lhs: NSDate, rhs: NSDate) -> Bool {
+    return lhs === rhs || lhs.compare(rhs) == .OrderedSame
+}
+
+public func <(lhs: NSDate, rhs: NSDate) -> Bool {
+    return lhs.compare(rhs) == .OrderedAscending
+}
+
+extension NSDate: Comparable { }
