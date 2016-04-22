@@ -10,6 +10,47 @@ import UIKit
 
 class DashboardTableViewController: UITableViewController, SWRevealViewControllerDelegate {
 
+    var flag = 0;
+    //flag 0 = admin, 1 = operational, 2 = technical
+    
+    let actions0 = ["Admit Patients", "Manage Patients", "Discharge Current Appointment"]
+    let actions1 = ["John Doe", "John Handcock", "John Smith"]
+    let actions2 = ["Request / Complete Test", "Diagnose Symptoms / Issue Treatment", "Manage Patients"]
+    
+    let detail00 = ["For appointment at:","Delete, Edit Information","John Doe"]
+    let detail01 = ["Tuesday , May 10th, 2016", "Transfer, Check Status, Change Insurence", "Tuesday , May 10th, 2016"]
+    let detail02 = ["8am - 10am","Active Patients","8am - 10am"]
+    
+    let detail10 = ["John Doe","Reggie Raglin","John Smith"]
+    let detail11 = ["Tuesday , May 10th, 2016", "Tuesday , May 10th, 2016", "Tuesday , May 10th, 2016"]
+    let detail12 = ["8am - 10am","10am - 12pm","12pm - 2pm"]
+    
+    let detail20 = ["John Doe","John Doe","Delete, Edit Information"]
+    let detail21 = ["Tuesday , May 10th, 2016","Tuesday , May 10th, 2016","Transfer, Check Status, Change Insurence"]
+    let detail22 = ["8am - 10am","8am - 10am","Active Patients"]
+    
+    let pendingRequest = ["Chemical Testing","Chemical Testing","Chemical Testing"]
+    let pendingDetail0 = ["John Doe","John Doe","John Doe"]
+    let pendingDetail1 = ["Blood Testing 3,5","Blood Testing 3,5","Blood Testing 3,5"]
+    let pendingDetail2 = ["May 1, 2016","May 1, 2016","May 1, 2016"]
+
+    let perscriptionRequest = ["CVS Pharmacy","CVS Pharmacy","CVS Pharmacy"]
+    let perscriptionDetail0 = ["John Doe","John Doe","John Doe"]
+    let perscriptionDetail1 = ["Albuterol","Albuterol","Albuterol"]
+    let perscriptiongDetail2 = ["May 1, 2016","May 1, 2016","May 1, 2016"]
+    
+
+
+
+    
+    @IBOutlet weak var segmentDemo: UISegmentedControl!
+    
+    @IBAction func SegDemo(sender: AnyObject) {
+        flag = segmentDemo.selectedSegmentIndex
+        self.tableView.reloadData()
+    }
+    
+    
     var menuButton: UIButton!
     
     override func viewDidLoad() {
@@ -32,6 +73,9 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
         self.setNeedsStatusBarAppearanceUpdate()
+        
+        let nib1 = UINib(nibName: "MIMSCell", bundle: nil)
+        tableView.registerNib(nib1, forCellReuseIdentifier: "MIMS")
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -46,23 +90,173 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 3
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        if section == 0 {
+            return 3
+        }
+        else if section == 1
+        {
+            return pendingRequest.count
+        }
+        else
+        {
+            return perscriptionRequest.count
+        }
     }
 
-    /*
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCellWithIdentifier("MIMS", forIndexPath: indexPath) as! MIMSTableViewCell
+        switch flag {
+        case 0:
+            if indexPath.section == 0 {
+                cell.titleLabel.text = actions0[indexPath.row]
+                cell.detailLabel1.text = detail00[indexPath.row]
+                cell.detailLabel2.text = detail01[indexPath.row]
+                cell.detailLabel3.text = detail02[indexPath.row]
+                cell.sideInformationLabel.text = " ";
+                return cell
+            }
+            if indexPath.section == 1
+            {
+                cell.titleLabel.text = pendingRequest[indexPath.row]
+                cell.detailLabel1.text = pendingDetail0[indexPath.row]
+                cell.detailLabel2.text = pendingDetail1[indexPath.row]
+                cell.detailLabel3.text = pendingDetail2[indexPath.row]
+                cell.sideInformationLabel.text = " ";
+                return cell
+            }
+            if indexPath.section == 2
+            {
+                cell.titleLabel.text = perscriptionRequest[indexPath.row]
+                cell.detailLabel1.text = perscriptionDetail0[indexPath.row]
+                cell.detailLabel2.text = perscriptionDetail1[indexPath.row]
+                cell.detailLabel3.text = perscriptiongDetail2[indexPath.row]
+                cell.sideInformationLabel.text = " ";
+                return cell
+            }
+            
+        case 1:
+            if indexPath.section == 0
+            {
+                cell.titleLabel.text = detail10[indexPath.row]
+                cell.detailLabel1.text = detail11[indexPath.row]
+                cell.detailLabel2.text = detail12[indexPath.row]
+                cell.detailLabel3.text = " "
+                cell.sideInformationLabel.text = " ";
+                return cell
+            }
+            if indexPath.section == 1
+            {
+                cell.titleLabel.text = pendingRequest[indexPath.row]
+                cell.detailLabel1.text = pendingDetail0[indexPath.row]
+                cell.detailLabel2.text = pendingDetail1[indexPath.row]
+                cell.detailLabel3.text = pendingDetail2[indexPath.row]
+                cell.sideInformationLabel.text = "Active";
+                return cell
+            }
+            if indexPath.section == 2
+            {
+                cell.titleLabel.text = perscriptionRequest[indexPath.row]
+                cell.detailLabel1.text = perscriptionDetail0[indexPath.row]
+                cell.detailLabel2.text = perscriptionDetail1[indexPath.row]
+                cell.detailLabel3.text = perscriptiongDetail2[indexPath.row]
+                cell.sideInformationLabel.text = "Waiting";
+                return cell
+            }
+        case 2:
+            if indexPath.section == 0
+            {
+                cell.titleLabel.text = actions2[indexPath.row]
+                cell.detailLabel1.text = detail20[indexPath.row]
+                cell.detailLabel2.text = detail21[indexPath.row]
+                cell.detailLabel3.text = detail22[indexPath.row]
+                cell.sideInformationLabel.text = " ";
+                return cell
+            }
+            if indexPath.section == 1
+            {
+                cell.titleLabel.text = pendingRequest[indexPath.row]
+                cell.detailLabel1.text = pendingDetail0[indexPath.row]
+                cell.detailLabel2.text = pendingDetail1[indexPath.row]
+                cell.detailLabel3.text = pendingDetail2[indexPath.row]
+                cell.sideInformationLabel.text = " ";
+                return cell
+            }
+            if indexPath.section == 2
+            {
+                cell.titleLabel.text = perscriptionRequest[indexPath.row]
+                cell.detailLabel1.text = perscriptionDetail0[indexPath.row]
+                cell.detailLabel2.text = perscriptionDetail1[indexPath.row]
+                cell.detailLabel3.text = perscriptiongDetail2[indexPath.row]
+                cell.sideInformationLabel.text = " ";
+                return cell
+            }
+        default:
+            cell.titleLabel.text = actions2[indexPath.row]
+            cell.detailLabel1.text = detail20[indexPath.row]
+            cell.detailLabel2.text = detail21[indexPath.row]
+            cell.detailLabel3.text = detail22[indexPath.row]
+            cell.sideInformationLabel.text = " ";
+            return cell
+        }
+        
         return cell
     }
-    */
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch flag {
+        case 0:
+            if section == 0 {
+                return "Action"
+            }
+            else if section == 1 {
+                return "Pending Requests"
+            }
+            else {
+                return "Perscriptions Sent"
+            }
+        case 1:
+            if section == 0 {
+                return "Next Appointment"
+            }
+            else if section == 1 {
+                return "Pending Requests"
+            }
+            else {
+                return "Perscriptions Sent"
+            }
+        case 2:
+            if section == 0 {
+                return "Action"
+            }
+            if section == 1 {
+                return "Pending Requests"
+            }
+            else {
+                return "Perscriptions Sent"
+            }
+        default:
+            if section == 0 {
+                return "Action"
+            }
+            if section == 1 {
+                return "Pending Requests"
+            }
+            if section == 2 {
+                return "Perscriptions Sent"
+            }
+        }
+        return " "
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 90
+    }
+
 
     /*
     // Override to support conditional editing of the table view.

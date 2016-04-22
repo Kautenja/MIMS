@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		171D70161CC5309A00402A04 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171D70151CC5309A00402A04 /* LoginViewController.swift */; };
 		17A2638F1CC140F40092B027 /* ParseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A2638E1CC140F40092B027 /* ParseManager.swift */; };
+		2F7D06081CCA9DF20081F59D /* MIMSCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2F7D06071CCA9DF20081F59D /* MIMSCell.xib */; };
+		2F7D060B1CCA9FA60081F59D /* MIMSTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7D060A1CCA9FA60081F59D /* MIMSTableViewCell.swift */; };
 		6787431709933676BEAB7178 /* Pods_MIMS_MIMSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14CE67DC1A201621FFADB68E /* Pods_MIMS_MIMSTests.framework */; };
 		8F0CD4221CB737F500615490 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4211CB737F500615490 /* AppDelegate.swift */; };
 		8F0CD4271CB737F500615490 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F0CD4251CB737F500615490 /* Main.storyboard */; };
@@ -47,6 +49,8 @@
 		14CE67DC1A201621FFADB68E /* Pods_MIMS_MIMSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MIMS_MIMSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		171D70151CC5309A00402A04 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		17A2638E1CC140F40092B027 /* ParseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseManager.swift; sourceTree = "<group>"; };
+		2F7D06071CCA9DF20081F59D /* MIMSCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MIMSCell.xib; sourceTree = "<group>"; };
+		2F7D060A1CCA9FA60081F59D /* MIMSTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIMSTableViewCell.swift; sourceTree = "<group>"; };
 		7CB677F43484CB2D4FB2691F /* Pods_MIMS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MIMS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F0CD41E1CB737F400615490 /* MIMS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MIMS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F0CD4211CB737F500615490 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +128,15 @@
 			name = Storyboards;
 			sourceTree = "<group>";
 		};
+		2F7D06091CCA9F4E0081F59D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2F7D06071CCA9DF20081F59D /* MIMSCell.xib */,
+				2F7D060A1CCA9FA60081F59D /* MIMSTableViewCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		8F0CD4151CB737F400615490 = {
 			isa = PBXGroup;
 			children = (
@@ -148,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				8F27425F1CC9BD1600D7B4B6 /* Appointments */,
+				2F7D06091CCA9F4E0081F59D /* Cells */,
 				8F27425C1CC9B98B00D7B4B6 /* Patients */,
 				8F6AFF891CC6A8C400A8A1F0 /* RevealView */,
 				8F6AFF861CC6A65E00A8A1F0 /* Dashboard */,
@@ -329,6 +343,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F0CD42C1CB737F500615490 /* LaunchScreen.storyboard in Resources */,
+				2F7D06081CCA9DF20081F59D /* MIMSCell.xib in Resources */,
 				8F27426C1CC9C8A400D7B4B6 /* Dashboard Filled-100.png in Resources */,
 				8F27426D1CC9C8A400D7B4B6 /* Side menu.png in Resources */,
 				8F27426A1CC9C8A400D7B4B6 /* Heart Monitor Filled-100.png in Resources */,
@@ -449,6 +464,7 @@
 			files = (
 				8F6AFF881CC6A69D00A8A1F0 /* DashboardTableViewController.swift in Sources */,
 				171D70161CC5309A00402A04 /* LoginViewController.swift in Sources */,
+				2F7D060B1CCA9FA60081F59D /* MIMSTableViewCell.swift in Sources */,
 				8F0CD4221CB737F500615490 /* AppDelegate.swift in Sources */,
 				8FF2F8EF1CC5270000E207B3 /* SWRevealViewController.m in Sources */,
 				8F27425E1CC9B9B000D7B4B6 /* PatientTableViewController.swift in Sources */,
