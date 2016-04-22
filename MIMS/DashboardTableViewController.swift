@@ -60,7 +60,7 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
         menuButton.setBackgroundImage(UIImage(named: "Side menu.png"), forState: .Normal)
         let menuButtonItem = UIBarButtonItem(customView: menuButton)
         self.navigationItem.setLeftBarButtonItem(menuButtonItem, animated: true)
-        self.title = "Dashboard"
+        self.title = ""
         self.navigationController?.navigationBar.translucent = false
         
         if self.revealViewController() != nil {
