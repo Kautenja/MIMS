@@ -844,6 +844,11 @@ class Immunization: Treatment {
     }
 }
 
+enum MeasurementError: ErrorType {
+    case InvalidBloodPressure
+    case InvalidHeight
+}
+
 //MARK: Measurement Class
 /**
  A class for the various measurements that can be taken
@@ -865,7 +870,9 @@ class Measurement: PFObject, PFSubclassing {
             return self["timeTaken"] as? NSDate
         }
         set {
-            self["timeTaken"] = newValue
+            if newValue != nil {
+                self["timeTaken"] = newValue!
+            }
         }
     }
     
@@ -887,7 +894,7 @@ class Measurement: PFObject, PFSubclassing {
         }
         set {
             if newValue > 0 {
-                self["systolic"] = newValue
+                self["systolic"] = newValue!
             }
         }
     }
@@ -898,7 +905,7 @@ class Measurement: PFObject, PFSubclassing {
         }
         set {
             if newValue > 0 {
-                self["diastolic"] = newValue
+                self["diastolic"] = newValue!
             }
         }
     }
@@ -912,8 +919,8 @@ class Measurement: PFObject, PFSubclassing {
             return self["heightFeet"] as? Int
         }
         set {
-            if newValue > 0 && newValue < 8 {
-                self["heightFeet"] = newValue
+            if newValue > 0 && newValue <= 8 {
+                self["heightFeet"] = newValue!
             }
         }
     }
@@ -924,7 +931,7 @@ class Measurement: PFObject, PFSubclassing {
         }
         set {
             if newValue > 0 && newValue <= 12 {
-                self["heightInches"] = newValue
+                self["heightInches"] = newValue!
             }
         }
     }
@@ -939,7 +946,7 @@ class Measurement: PFObject, PFSubclassing {
         }
         set {
             if newValue > 0 {
-                self["weight"] = newValue
+                self["weight"] = newValue!
             }
         }
     }
@@ -951,7 +958,10 @@ class Measurement: PFObject, PFSubclassing {
      - parameter systolic:  The patient's new systolic number
      - parameter diastolic: The patient's new diastolic number
      */
-    func addNewBloodPressure(systolic: Int, diastolic: Int) {
+    func addNewBloodPressure(systolic: Int, diastolic: Int) throws {
+        guard systolic > 0 && systolic < 200 && diastolic > 0 && diastolic < 160 else {
+            throw MeasurementError.InvalidBloodPressure
+        }
         self.systolic = systolic
         self.diastolic = diastolic
     }
@@ -963,7 +973,10 @@ class Measurement: PFObject, PFSubclassing {
      - parameter feet:   The patient's height in feet
      - parameter inches: The patient's height in inches
      */
-    func addHeight(feet: Int, inches: Int) {
+    func addHeight(feet: Int, inches: Int) throws {
+        guard feet > 0 && feet <= 10 && inches > 0 && inches <= 12 else {
+            throw MeasurementError.InvalidHeight
+        }
         self.feet = feet
         self.inches = inches
     }
@@ -973,6 +986,9 @@ class Measurement: PFObject, PFSubclassing {
     }
 }
 
+/**
+ *  <#Description#>
+ */
 struct Disease {
     enum Disease: String {
         case Diabetes = "diabetes"
@@ -1177,7 +1193,41 @@ class Condition: PFObject, PFSubclassing {
 
 class Appointment: PFObject, PFSubclassing {
     
+    var timeCreated: NSDate? {
+        get { return self.createdAt }
+    }
     
+    var timeScheduled: NSDate? {
+        get {
+            return self["timeScheduled"] as? NSDate
+        }
+        set {
+            if newValue != nil {
+                self["timeScheduled"] = newValue!
+            }
+        }
+    }
+    
+    var attendingPhysician: MIMSUser? {
+        get {
+            return self["doctor"] as? MIMSUser
+        }
+        set {
+            if newValue != nil {
+                self["doctor"] = newValue!
+            }
+        }
+    }
+    
+    var department: Department? {
+        get { return self["department"] as? Department }
+        set { if newValue != nil { self["department"] = newValue! } }
+    }
+    
+    var appointmentNotes: [String]? {
+        get { return self["notes"] as? [String] }
+        set {}
+    }
     
     class func parseClassName() -> String {
         return "Appointment"
