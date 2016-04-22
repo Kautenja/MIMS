@@ -79,10 +79,27 @@ class PatientRecord: PFObject, PFSubclassing {
         }
     }
     
+    var dischargeStatus: Bool? {
+        get {
+            return self["dischargeStatus"] as? Bool
+        }
+        set {
+            self["dischargeStatus"] = newValue!
+        }
+    }
+    
     //scans
+    var scansTaken: [Scan]? {
+        get {return self["scans"] as? [Scan] }
+        set {}
+    }
     
     
     //tests
+    var testsTaken: [Test]? {
+        get {return self["tests"] as? [Test]}
+        set {}
+    }
     
     func addAppointment(newAppointment: Appointment) {
         self.appointments?.append(newAppointment)
@@ -96,6 +113,17 @@ class PatientRecord: PFObject, PFSubclassing {
         self.treatments?.append(newTreatment)
     }
     
+    func dischargeStatus(newStatus: Bool) {
+        self.dischargeStatus = newStatus
+    }
+    
+    func addScan(newScan scan: Scan) {
+        self.scansTaken?.append(scan)
+    }
+    
+    func addTest(newTest test: Test) {
+        self.testsTaken?.append(test)
+    }
     
     class func parseClassName() -> String {
         return "Patient Record"
@@ -1187,6 +1215,58 @@ class Condition: PFObject, PFSubclassing {
     
     class func parseClassName() -> String {
         return "Condition"
+    }
+}
+
+class Test: PFObject, PFSubclassing {
+    
+    var timeCreated: NSDate? {
+        get { return self.createdAt}
+    }
+    
+    var timeModified: NSDate? {
+        get { return self.updatedAt}
+        set {}
+    }
+    
+    
+    var testDescription: String? {
+        get {return self["testDescription"] as? String}
+        set { if newValue != nil { self["testDescription"] = newValue! } }
+    }
+    
+    convenience init(initWithTestDescription description: String) {
+        self.init()
+        self.testDescription = description
+    }
+    
+    class func parseClassName() -> String {
+        return "Test"
+    }
+}
+
+class Scan: PFObject, PFSubclassing {
+    var timeCreated: NSDate? {
+        get {return self.createdAt }
+    }
+    
+    var timeModified: NSDate? {
+        get {return self.updatedAt }
+        set {}
+    }
+    
+    var scanType: String? {
+        get {return self["scanType"] as? String }
+        set { if newValue != nil {self["scanType"] = newValue!} }
+    }
+    
+    convenience init(initWithType type: String) {
+        self.init()
+        self.scanType = type
+    }
+    
+    class func parseClassName() -> String {
+        return "Scan"
     }
 }
 

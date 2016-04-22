@@ -185,6 +185,9 @@
                                                 <constraint firstItem="44k-kj-fE7" firstAttribute="centerY" secondItem="t03-Ea-l4k" secondAttribute="centerY" id="KY8-02-hVW"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="B39-g7-rQj" kind="custom" identifier="" customClass="SWRevealViewControllerSeguePushController" id="q8C-8a-eSE"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="adminCell" rowHeight="60" id="i5Z-0D-8nf">
                                         <rect key="frame" x="0.0" y="180" width="600" height="60"/>
@@ -288,7 +291,7 @@
         <!--Root View Controller-->
         <scene sceneID="cFU-NF-dY4">
             <objects>
-                <tableViewController id="rRa-zi-UMc" sceneMemberID="viewController">
+                <tableViewController id="rRa-zi-UMc" customClass="PatientTableViewController" customModule="MIMS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="3LJ-ra-aUY">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -333,6 +336,51 @@
                 </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="1474" y="2559"/>
+        </scene>
+        <!--Root View Controller-->
+        <scene sceneID="pZL-EZ-ZEk">
+            <objects>
+                <tableViewController id="U5k-Au-hQZ" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="OEu-YK-e1y">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="chD-7c-a1w">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="chD-7c-a1w" id="mfh-H9-VF2">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="U5k-Au-hQZ" id="aBd-AQ-Ebz"/>
+                            <outlet property="delegate" destination="U5k-Au-hQZ" id="4cw-wN-OFY"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Root View Controller" id="Iao-Sc-DTh"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1cL-xm-TwC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1474" y="3235"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="ql0-fI-ZUC">
+            <objects>
+                <navigationController id="B39-g7-rQj" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Xyf-HX-wsG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="U5k-Au-hQZ" kind="relationship" relationship="rootViewController" id="18o-eY-guV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oAc-pZ-nZT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="808" y="3235"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PFa-OT-oOz">
