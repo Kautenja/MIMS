@@ -341,7 +341,7 @@
                     <navigationItem key="navigationItem" title="Root View Controller" id="NO7-MV-ydf"/>
                     <connections>
                         <outlet property="searchDisplayController" destination="1oD-3L-nVV" id="3FT-FH-icR"/>
-                        <segue destination="Wox-VW-MvD" kind="show" id="WVF-GS-d8z"/>
+                        <segue destination="Wox-VW-MvD" kind="show" identifier="Information" id="WVF-GS-d8z"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SU1-er-iCG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -386,16 +386,16 @@
             </objects>
             <point key="canvasLocation" x="1474" y="3235"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Patient Information Table View Controller-->
         <scene sceneID="jPE-L7-1E5">
             <objects>
-                <tableViewController id="Wox-VW-MvD" sceneMemberID="viewController">
+                <tableViewController id="Wox-VW-MvD" customClass="PatientInformationTableViewController" customModule="MIMS" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="dbC-Sd-HEj">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="VYW-si-GMe" detailTextLabel="3OE-Qj-IVQ" style="IBUITableViewCellStyleValue1" id="xXQ-DP-lFb">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Information" textLabel="VYW-si-GMe" detailTextLabel="3OE-Qj-IVQ" style="IBUITableViewCellStyleValue1" id="xXQ-DP-lFb">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xXQ-DP-lFb" id="Rq8-R8-AsU">
@@ -417,14 +417,6 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="fxV-sF-UaD">
-                                <rect key="frame" x="0.0" y="136" width="600" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fxV-sF-UaD" id="lxi-66-Lnp">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>

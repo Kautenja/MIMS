@@ -80,17 +80,23 @@ class PatientTableViewController: UITableViewController, SWRevealViewControllerD
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 90
     }
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.performSegueWithIdentifier("Information", sender: tableView)
+
+    }
+
+
     
-
-
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "Information" {
+            let indexPath:NSIndexPath = self.tableView.indexPathForSelectedRow!
+            let detailVC:PatientInformationTableViewController = segue.destinationViewController as! PatientInformationTableViewController
+            detailVC.title = name[indexPath.row]
+            
+        }
     }
-    */
 
 }
