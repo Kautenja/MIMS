@@ -12,6 +12,38 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
 
     var menuButton: UIButton!
     
+    var flag: String!
+    //flag 0 = admin, 1 = operational, 2 = technical
+    
+    let actions0 = ["Admit Patients", "Manage Patients", "Discharge Current Appointment"]
+    let actions1 = ["John Doe", "John Handcock", "John Smith"]
+    let actions2 = ["Request / Complete Test", "Diagnose Symptoms / Issue Treatment", "Manage Patients"]
+    
+    let detail00 = ["For appointment at:","Delete, Edit Information","John Doe"]
+    let detail01 = ["Tuesday , May 10th, 2016", "Transfer, Check Status, Change Insurence", "Tuesday , May 10th, 2016"]
+    let detail02 = ["8am - 10am","Active Patients","8am - 10am"]
+    
+    let detail10 = ["John Doe","Reggie Raglin","John Smith"]
+    let detail11 = ["Tuesday , May 10th, 2016", "Tuesday , May 10th, 2016", "Tuesday , May 10th, 2016"]
+    let detail12 = ["8am - 10am","10am - 12pm","12pm - 2pm"]
+    
+    let detail20 = ["John Doe","John Doe","Delete, Edit Information"]
+    let detail21 = ["Tuesday , May 10th, 2016","Tuesday , May 10th, 2016","Transfer, Check Status, Change Insurence"]
+    let detail22 = ["8am - 10am","8am - 10am","Active Patients"]
+    
+    let pendingRequest = ["Chemical Testing","Chemical Testing","Chemical Testing"]
+    let pendingDetail0 = ["John Doe","John Doe","John Doe"]
+    let pendingDetail1 = ["Blood Testing 3,5","Blood Testing 3,5","Blood Testing 3,5"]
+    let pendingDetail2 = ["May 1, 2016","May 1, 2016","May 1, 2016"]
+    
+    let perscriptionRequest = ["CVS Pharmacy","CVS Pharmacy","CVS Pharmacy"]
+    let perscriptionDetail0 = ["John Doe","John Doe","John Doe"]
+    let perscriptionDetail1 = ["Albuterol","Albuterol","Albuterol"]
+    let perscriptiongDetail2 = ["May 1, 2016","May 1, 2016","May 1, 2016"]
+    
+    
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
