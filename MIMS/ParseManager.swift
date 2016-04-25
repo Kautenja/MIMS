@@ -1732,12 +1732,24 @@ class ParseClient {
         modifiedRecord.saveInBackground()
     }
     
+    /**
+     Method that should be called when new tests have been selected to add to the patient record.add
+     
+     - parameter newlyRequestedTests: The array of newly requested tests
+     - parameter record:              The patient record
+     */
     class func addPatientTests(newlyRequestedTests: [String], toPatientRecord record: PatientRecord) {
         for testDescription in newlyRequestedTests {
             record.addTest(newTest: Test(initWithTestDescription: testDescription))
         }
     }
     
+    /**
+     Method that should be called when you want to makr certain tests as completed
+     
+     - parameter newlyCompletedTests: The array of tests that should be marked as completed. These should have already been retrieved for display anyways, so just pass the value, no need to re-query
+     - parameter record:              The patient record
+     */
     class func markTestsAsCompleted(newlyCompletedTests: [Test], fromPatientRecord record: PatientRecord) {
         for test in newlyCompletedTests {
             test.completedStatus = true
@@ -1745,6 +1757,13 @@ class ParseClient {
         }
     }
     
+    /**
+     Method to add new prescriptions to the patient record via the "treatments" property. The array of prescriptions needs to be precreated by the callee
+     
+     - parameter newlyRequestedScripts: The newly requested prescriptions
+     - parameter record:                The patient record to add the prescriptions to
+     - parameter completion:            Completion called with an error if the prescriptions can't be added, or nil otherwise.
+     */
     class func addNewPrescription(newlyRequestedScripts: [Prescription], toRecord record: PatientRecord, completion: (error: NSError?)->()) {
         guard let treatments = record.treatments else {
             let error = NSError(domain: "Patient Treatments", code: 000, userInfo: ["description" : "Unable to retrieve treatments!"])
@@ -1764,6 +1783,13 @@ class ParseClient {
         }
     }
     
+    /**
+     Method to add new surgeries to the patient record via the "treatments" property. The array of surgeries needs to be created by the callee
+     
+     - parameter newlyRequeustedSurgeries: The new surgeries to add
+     - parameter record:                   The patient record
+     - parameter completion:               Completion called with error if unable to add the surgeries or nil otherwise
+     */
     class func addNewSurgeries(newlyRequeustedSurgeries: [Surgery], toRecord record: PatientRecord, completion: (error: NSError?) ->()) {
         guard let treatments = record.treatments else {
             let error = NSError(domain: "Patient Treatments", code: 000, userInfo: ["description" : "Unable to retrieve treatments!"])
@@ -1784,6 +1810,13 @@ class ParseClient {
         }
     }
     
+    /**
+     Method to add new immunizations to the patient record via the "treatments" property. The array of immunizations needs to be created by the callee
+     
+     - parameter newlyRequeustedImmunizations: The new immunizations to add
+     - parameter record:                   The patient record
+     - parameter completion:               Completion called with error if unable to add the immunizations or nil otherwise
+     */
     class func addNewImmunizations(newlyRequeustedImmunizations: [Immunization], toRecord record: PatientRecord, completion: (error: NSError?) ->()) {
         guard let treatments = record.treatments else {
             let error = NSError(domain: "Patient Treatments", code: 000, userInfo: ["description" : "Unable to retrieve treatments!"])
@@ -1804,7 +1837,14 @@ class ParseClient {
         }
     }
     
-    
+    /**
+     Method to add allergies to the patient record.
+     
+     - parameter newAllergies: The new allergies names to add
+     - parameter record:       The patient record to add to
+     
+     - returns: An error if the allergy name is invalid or if there is some other unknown error.
+     */
     class func addAllergies(newAllergies: [String], toPatientRecord record: PatientRecord) -> NSError? {
         var error: NSError?
         for allergy in newAllergies {
@@ -1820,6 +1860,14 @@ class ParseClient {
         return error
     }
     
+    /**
+     Method to add disorders to the patient record.
+     
+     - parameter newDisorders: The new disorder names to add
+     - parameter record:       The patient record to add to
+     
+     - returns: An error if the disorder name is invalid or if there is some unknown error, nil otherwise
+     */
     class func addDisorders(newDisorders: [String], toPatientRecord record: PatientRecord) -> NSError? {
         var error: NSError?
         for disorder in newDisorders {
@@ -1835,6 +1883,14 @@ class ParseClient {
         return error
     }
     
+    /**
+     Method to add diseases to the patient record.
+     
+     - parameter newDiseases: The new diseases to add
+     - parameter record:      The patient record to add to
+     
+     - returns: An error if the disease name is invalid or nil otherwise
+     */
     class func addDiseases(newDiseases: [String], toPatientRecord record: PatientRecord) -> NSError? {
         var error: NSError?
         for disease in newDiseases {
@@ -1848,6 +1904,32 @@ class ParseClient {
         }
         record.saveEventually()
         return error
+    }
+    
+    /**
+     Method to add a new cause of death. Can only be assigned if a cause of death hasn't already been assigned.add
+     
+     - parameter newCOD: The new newCOD
+     - parameter record: The patient record
+     
+     - returns: An error if unable to add the record
+     */
+    class func addNewCauseOfDeath(newCOD cod: String, toPatientRecord record: PatientRecord) -> NSError? {
+        var error: NSError?
+        if let _ = record.conditions?.causeOfDeath {
+            error = NSError(domain: "Condition error", code: 004, userInfo: ["description": "Cause of Death can only be assigned once!"])
+            return error
+        }
+        do {
+            try record.conditions?.addCauseOfDeath(cod)
+        } catch ConditionErrors.InvalidCOD {
+            error = NSError(domain: "Condition error", code: 002, userInfo: ["description" : "Invalid cause of death"])
+            return error
+        } catch _ {
+            error = NSError(domain: "Condition error", code: 003, userInfo: ["description": "Unknown cause of death error"])
+            return error
+        }
+        return nil
     }
     
     class func transferPatient(toNewDoctorWithName name: String, withPatientRecord record: PatientRecord, completion: (success: Bool, error: NSError?) ->()) {
