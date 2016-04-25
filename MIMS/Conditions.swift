@@ -24,7 +24,7 @@ struct Disease {
     
     init(withDiseaseName name: String) throws {
         guard let newDisease = Disease(rawValue: name) else {
-            throw ConditionErrors.InvalidDisease
+            throw ConditionError.InvalidDisease
         }
         self.disease = newDisease
     }
@@ -44,7 +44,7 @@ struct Allergy {
     
     init(withAllergyName name: String) throws {
         guard let newAllergy = Allergies(rawValue: name) else {
-            throw ConditionErrors.InvalidAllergy
+            throw ConditionError.InvalidAllergy
         }
         self.allergy = newAllergy
     }
@@ -63,7 +63,7 @@ struct Disorder {
     
     init(withDisorderName name: String) throws {
         guard let newDisorder = Disorders(rawValue: name) else {
-            throw ConditionErrors.InvalidDisorder
+            throw ConditionError.InvalidDisorder
         }
         self.disorder = newDisorder
     }
@@ -81,14 +81,14 @@ struct CauseOfDeath {
     
     init(withCauseOfDeath cod: String) throws {
         guard let newCOD = Cause(rawValue: cod) else {
-            throw ConditionErrors.InvalidCOD
+            throw ConditionError.InvalidCOD
         }
         self.causeOfDeath = newCOD
     }
     
 }
 
-enum ConditionErrors: ErrorType {
+enum ConditionError: ErrorType {
     case InvalidDisease
     case InvalidAllergy
     case InvalidCOD
@@ -155,8 +155,8 @@ class Condition: PFObject, PFSubclassing {
         do {
             let disease = try Disease(withDiseaseName: newDisease)
             self.disease?.append(disease.description)
-        } catch ConditionErrors.InvalidDisease {
-            throw ConditionErrors.InvalidDisease
+        } catch ConditionError.InvalidDisease {
+            throw ConditionError.InvalidDisease
         }
     }
     
@@ -171,8 +171,8 @@ class Condition: PFObject, PFSubclassing {
         do {
             let allergy = try Allergy(withAllergyName: newAllergy)
             self.allergies?.append(allergy.description)
-        } catch ConditionErrors.InvalidAllergy {
-            throw ConditionErrors.InvalidAllergy
+        } catch ConditionError.InvalidAllergy {
+            throw ConditionError.InvalidAllergy
         }
     }
     
@@ -187,8 +187,8 @@ class Condition: PFObject, PFSubclassing {
         do {
             let disorder = try Disorder(withDisorderName: newDisorder)
             self.disorders?.append(disorder.description)
-        } catch ConditionErrors.InvalidDisorder {
-            throw ConditionErrors.InvalidDisorder
+        } catch ConditionError.InvalidDisorder {
+            throw ConditionError.InvalidDisorder
         }
     }
     
@@ -203,8 +203,8 @@ class Condition: PFObject, PFSubclassing {
         do {
             let causeOfDeath = try CauseOfDeath(withCauseOfDeath: cause)
             self.causeOfDeath = causeOfDeath.description
-        } catch ConditionErrors.InvalidCOD {
-            throw ConditionErrors.InvalidCOD
+        } catch ConditionError.InvalidCOD {
+            throw ConditionError.InvalidCOD
         }
     }
     

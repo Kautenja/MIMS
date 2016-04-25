@@ -143,10 +143,11 @@ class PatientRecord: PFObject, PFSubclassing {
     }
 }
 
-enum PatientErrors: ErrorType {
+enum PatientError: ErrorType {
     case InvalidBrthday
     case InvalidSSN
     case InvalidName
+    case InvalidPhoneNumber
 }
 
 //MARK: Patient Class
@@ -242,6 +243,11 @@ class Patient: PFObject, PFSubclassing {
         }
     }
     
+    var phoneNumber: String? {
+        get {return self["phone"] as? String}
+        set {if newValue != nil {self["phone"] = newValue!}}
+    }
+    
     var financials: FinancialInformation? {
         get {
             return self["financialData"] as? FinancialInformation
@@ -264,18 +270,21 @@ class Patient: PFObject, PFSubclassing {
      - parameter insuranceInfo: The patient's insurance info
      - parameter financeData:   The patient's finance data
      
-     -throws: Patient Errors.InvalidBirthday, PatientErrors.InvalidSSN, PatientErrors.InvalidName
+     -throws: Patient Error.InvalidBirthday, PatientError.InvalidSSN, PatientError.InvalidName
      - returns:
      */
-    convenience init(initWithInfo name: String, married: Bool, gender: Bool, birthday: NSDate, ssn: String, address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation) throws {
+    convenience init(initWithInfo name: String, married: Bool, gender: Bool, birthday: NSDate, ssn: String, address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation, phoneNumber: String) throws {
         guard birthday <= NSDate() else {
-            throw PatientErrors.InvalidBrthday
+            throw PatientError.InvalidBrthday
         }
         guard ssn.characters.count == 9 else {
-            throw PatientErrors.InvalidSSN
+            throw PatientError.InvalidSSN
         }
         guard name.characters.count > 0 else {
-            throw PatientErrors.InvalidName
+            throw PatientError.InvalidName
+        }
+        guard phoneNumber.characters.count == 11 else {
+            throw PatientError.InvalidPhoneNumber
         }
         
         self.init()
@@ -305,13 +314,13 @@ class Patient: PFObject, PFSubclassing {
      */
     convenience init(initWithLessInfo name: String, married: Bool, gender: Bool, birthday: NSDate, ssn: String, address: Address) throws {
         guard birthday <= NSDate() else {
-            throw PatientErrors.InvalidBrthday
+            throw PatientError.InvalidBrthday
         }
         guard ssn.characters.count == 9 else {
-            throw PatientErrors.InvalidSSN
+            throw PatientError.InvalidSSN
         }
         guard name.characters.count > 0 else {
-            throw PatientErrors.InvalidName
+            throw PatientError.InvalidName
         }
         self.init()
         self.name = name

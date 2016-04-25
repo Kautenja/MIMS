@@ -48,12 +48,12 @@ class LoginViewController: UIViewController {
                     self.presentViewController(alert, animated: true, completion: nil)
                 }
             })
-        } catch ParseErrorCodes.InvalidPasswordLength(message: let message) {
+        } catch ParseError.InvalidPasswordLength(message: let message) {
             let alert = createAlert("Uh oh, we encountered an error!", errorMessage: message)
             self.presentViewController(alert, animated: true, completion: nil)
             print(message)
         }
-        catch ParseErrorCodes.InvalidUsernameLength(message: let message){
+        catch ParseError.InvalidUsernameLength(message: let message){
             let alert = createAlert("Uh oh, we encountered an error!", errorMessage: message)
             self.presentViewController(alert, animated: true, completion: nil)
             print(message)

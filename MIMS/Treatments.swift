@@ -173,6 +173,11 @@ class Surgery: PFObject, PFSubclassing {
         }
     }
     
+    var timeScheduled: NSDate? {
+        get {return self["timeScheduled"] as? NSDate}
+        set {if newValue != nil {self["timeScheduled"] = newValue!}}
+    }
+    
     convenience init(withSurgeon surgeon: MIMSUser) {
         self.init()
         self.attendingSurgeon = surgeon

@@ -9,7 +9,7 @@
 import Foundation
 import Parse
 
-enum AddressErrors: ErrorType {
+enum AddressError: ErrorType {
     case InvalidStreet
     case InvalidCity
     case InvalidState
@@ -80,7 +80,7 @@ class Address: PFObject, PFSubclassing {
      */
     func newAddress(street: String, city: String, state: String, zip: String) throws {
         guard street != "" && city != "" && state != "" && zip != "" else {
-            throw AddressErrors.InvalidAddress
+            throw AddressError.InvalidAddress
         }
         self.street = street
         self.city = city
@@ -97,7 +97,7 @@ class Address: PFObject, PFSubclassing {
      */
     func changeStreet(street: String) throws {
         guard street != "" else {
-            throw AddressErrors.InvalidStreet
+            throw AddressError.InvalidStreet
         }
         self.street = street
     }
@@ -111,7 +111,7 @@ class Address: PFObject, PFSubclassing {
      */
     func changeState(state: String) throws {
         guard state != "" else {
-            throw AddressErrors.InvalidState
+            throw AddressError.InvalidState
         }
         self.state = state
     }
@@ -125,7 +125,7 @@ class Address: PFObject, PFSubclassing {
      */
     func changeCity(city: String) throws {
         guard city != "" else {
-            throw AddressErrors.InvalidCity
+            throw AddressError.InvalidCity
         }
         self.city = city
     }
@@ -139,7 +139,7 @@ class Address: PFObject, PFSubclassing {
      */
     func changeZip(zip: String) throws {
         guard zip != "" else {
-            throw AddressErrors.InvalidZip
+            throw AddressError.InvalidZip
         }
         self.zipCode = zip
     }

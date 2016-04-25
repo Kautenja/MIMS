@@ -84,7 +84,7 @@ class Measurement: PFObject, PFSubclassing {
             return self["heightFeet"] as? Int
         }
         set {
-            if newValue > 0 && newValue <= 8 {
+            if newValue > 0 && newValue <= 10 {
                 self["heightFeet"] = newValue!
             }
         }
@@ -95,7 +95,7 @@ class Measurement: PFObject, PFSubclassing {
             return self["heightInches"] as? Int
         }
         set {
-            if newValue > 0 && newValue <= 12 {
+            if newValue > 0 && newValue < 12 {
                 self["heightInches"] = newValue!
             }
         }
@@ -105,9 +105,9 @@ class Measurement: PFObject, PFSubclassing {
         return "\(String(feet!)) feet, \(String(inches!)) inches" ?? ""
     }
     
-    var weight: Int? {
+    var weight: Double? {
         get {
-            return self["weight"] as? Int
+            return self["weight"] as? Double
         }
         set {
             if newValue > 0 {
@@ -124,7 +124,7 @@ class Measurement: PFObject, PFSubclassing {
      - parameter diastolic: The patient's new diastolic number
      */
     func addNewBloodPressure(systolic: Int, diastolic: Int) throws {
-        guard systolic > 0 && systolic < 200 && diastolic > 0 && diastolic < 160 else {
+        guard systolic > 0 && systolic < 300 && diastolic > 0 && diastolic < 200 else {
             throw MeasurementError.InvalidBloodPressure
         }
         self.systolic = systolic
@@ -139,7 +139,7 @@ class Measurement: PFObject, PFSubclassing {
      - parameter inches: The patient's height in inches
      */
     func addHeight(feet: Int, inches: Int) throws {
-        guard feet > 0 && feet <= 10 && inches > 0 && inches <= 12 else {
+        guard feet > 0 && feet <= 10 && inches > 0 && inches < 12 else {
             throw MeasurementError.InvalidHeight
         }
         self.feet = feet
@@ -161,6 +161,11 @@ class Test: PFObject, PFSubclassing {
     var timeModified: NSDate? {
         get { return self.updatedAt}
         set {}
+    }
+    
+    var timeCompleted: NSDate? {
+        get {return self["timeCompleted"] as? NSDate}
+        set {if newValue != nil {self["timeCompleted"] = newValue!}}
     }
     
     
