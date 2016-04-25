@@ -6,6 +6,7 @@
 //  Copyright © 2016 UML Lovers. All rights reserved.
 //
 
+import Parse
 import UIKit
 
 class LoginViewController: UIViewController {
@@ -15,6 +16,20 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        do {
+            let newUser = try! MIMSUser(withUserType: "Operational", department: "Emory", institution: "ENT")
+            newUser["email"] = "google5@gmail.com"
+            newUser.username = "operationaluser3"
+            newUser.password = "TestPass"
+            newUser.department = try! Department(withName: "ENT")
+            newUser.institution = Institution(initWithName: "Emory")
+            newUser.signUpInBackgroundWithBlock({ (success, error) in
+                if success {
+                    print("Success")
+                }
+            })
+
+        }
         // Do any additional setup after loading the view.
     }
 

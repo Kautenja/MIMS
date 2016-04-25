@@ -282,26 +282,7 @@
                             <outlet property="delegate" destination="ZWD-Go-TKi" id="86d-qQ-aHD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Bh5-S7-GXi">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="czK-7B-4e1">
-                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="E8Z-Q6-jA1">
-                                <rect key="frame" x="20" y="7" width="161" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="Admin"/>
-                                    <segment title="Doc"/>
-                                    <segment title="Tech"/>
-                                </segments>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <action selector="SegDemo:" destination="ZWD-Go-TKi" eventType="valueChanged" id="BbG-wh-YiS"/>
-                                </connections>
-                            </segmentedControl>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="segmentDemo" destination="E8Z-Q6-jA1" id="Rxw-ZU-tB8"/>
-                    </connections>
+                    <navigationItem key="navigationItem" id="Bh5-S7-GXi"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gL6-pa-5wE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -87,11 +87,11 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
     
     override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]?  {
         // 1
-        let cancelAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Cancel" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+        let cancelAction = UITableViewRowAction(style: UITableViewRowActionStyle.Destructive, title: "Cancel" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             // 2
             let shareMenu = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: .ActionSheet)
             
-            let cancelAction = UIAlertAction(title: "Cancel Appointment", style: UIAlertActionStyle.Default, handler: nil)
+            let cancelAction = UIAlertAction(title: "Cancel Appointment", style: UIAlertActionStyle.Destructive, handler: nil)
             let goBackAction = UIAlertAction(title: "Don't Cancel Appointment", style: UIAlertActionStyle.Cancel, handler: nil)
 
             shareMenu.addAction(goBackAction)
@@ -100,7 +100,7 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             
             self.presentViewController(shareMenu, animated: true, completion: nil)
         })
-        let completeAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Complete" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+        let completeAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "Complete" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             // 2
             let shareMenu = UIAlertController(title: nil, message: "Complete the Appointment?", preferredStyle: .ActionSheet)
             
@@ -113,7 +113,7 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             
             self.presentViewController(shareMenu, animated: true, completion: nil)
         })
-        let rescheduleAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: "Reschedule" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
+        let rescheduleAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "Reschedule" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
             // 2
             let shareMenu = UIAlertController(title: nil, message: "Reschedule the Appointment?", preferredStyle: .Alert)
             
@@ -124,6 +124,7 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             shareMenu.addAction(doneAction)
             shareMenu.addAction(cancelAction)
             
+            
             shareMenu.addTextFieldWithConfigurationHandler { (textField) in
                 textField.placeholder = "Enter a time: 8am - 10pm"
             }
@@ -133,6 +134,8 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             self.presentViewController(shareMenu, animated: true, completion: nil)
         })
         
+        rescheduleAction.backgroundColor = UIColor.blueColor()
+        completeAction.backgroundColor = UIColor.lightGrayColor()
         return [cancelAction,rescheduleAction,completeAction]
     }
 

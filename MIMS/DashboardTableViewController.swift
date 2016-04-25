@@ -10,7 +10,7 @@ import UIKit
 
 class DashboardTableViewController: UITableViewController, SWRevealViewControllerDelegate {
 
-    var flag = 0;
+    var flag: String!
     //flag 0 = admin, 1 = operational, 2 = technical
     
     let actions0 = ["Admit Patients", "Manage Patients", "Discharge Current Appointment"]
@@ -39,16 +39,6 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
     let perscriptionDetail1 = ["Albuterol","Albuterol","Albuterol"]
     let perscriptiongDetail2 = ["May 1, 2016","May 1, 2016","May 1, 2016"]
     
-
-
-
-    
-    @IBOutlet weak var segmentDemo: UISegmentedControl!
-    
-    @IBAction func SegDemo(sender: AnyObject) {
-        flag = segmentDemo.selectedSegmentIndex
-        self.tableView.reloadData()
-    }
     
     
     var menuButton: UIButton!
@@ -76,6 +66,14 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
         
         let nib1 = UINib(nibName: "MIMSCell", bundle: nil)
         tableView.registerNib(nib1, forCellReuseIdentifier: "MIMS")
+        
+        guard let userType = MIMSUser.currentUser()!.userType else {
+            flag = ""
+            return
+        }
+        self.title = userType
+        flag = userType
+
     }
 
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
@@ -111,8 +109,7 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MIMS", forIndexPath: indexPath) as! MIMSTableViewCell
-        switch flag {
-        case 0:
+        if flag == UserTypes.AdminUser.rawValue {
             if indexPath.section == 0 {
                 cell.titleLabel.text = actions0[indexPath.row]
                 cell.detailLabel1.text = detail00[indexPath.row]
@@ -139,8 +136,8 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
                 cell.sideInformationLabel.text = " ";
                 return cell
             }
-            
-        case 1:
+        }
+        else if flag == UserTypes.OperationalUser.rawValue {
             if indexPath.section == 0
             {
                 cell.titleLabel.text = detail10[indexPath.row]
@@ -168,7 +165,8 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
                 cell.sideInformationLabel.text = "Waiting";
                 return cell
             }
-        case 2:
+        }
+        else if flag == UserTypes.TechnicalUser.rawValue {
             if indexPath.section == 0
             {
                 cell.titleLabel.text = actions2[indexPath.row]
@@ -196,7 +194,8 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
                 cell.sideInformationLabel.text = " ";
                 return cell
             }
-        default:
+        }
+        else {
             cell.titleLabel.text = actions2[indexPath.row]
             cell.detailLabel1.text = detail20[indexPath.row]
             cell.detailLabel2.text = detail21[indexPath.row]
@@ -207,9 +206,10 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
         
         return cell
     }
+    
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch flag {
-        case 0:
+        case UserTypes.AdminUser.rawValue:
             if section == 0 {
                 return "Action"
             }
@@ -219,7 +219,7 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
             else {
                 return "Perscriptions Sent"
             }
-        case 1:
+        case UserTypes.OperationalUser.rawValue:
             if section == 0 {
                 return "Next Appointment"
             }
@@ -229,7 +229,7 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
             else {
                 return "Perscriptions Sent"
             }
-        case 2:
+        case UserTypes.TechnicalUser.rawValue:
             if section == 0 {
                 return "Action"
             }
