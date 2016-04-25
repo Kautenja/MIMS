@@ -14,6 +14,14 @@ class PatientInformationTableViewController: UITableViewController {
     
     let detailData = ["Name", "Address", "Phone", "Martial Status", "Allergies", "Medication", "Required Test", "Perscribed Medication"]
     
+    let actionData = ["Delete Patient Record", "Charge Patient", "Manage Patient Insurence", "Admit Patient", "Discharge Patient" , "Manage Patient Information", "Request Patient Test", "Complete Patient Test", "Diagnose Symptoms","Issue Treatent", "Prescribe Medication", "Check Patient Status", "Transfer Patient"]
+    
+    let technicalActionData = ["Complete Patient Test", "Diagnose Symptoms", "Check Patient Status", "Manage Patient Info"]
+    let adminData = ["Admit Patient", "Discharge Patient", "Manage Patient Info"]
+    let operationalData = ["Request Patient Test", "Complete Patient Test", "Diagnose Symptom", "Issue Treatment", "Prescribe Medication", "Check Patient Status", "Transfer Patient"]
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,7 +53,7 @@ class PatientInformationTableViewController: UITableViewController {
 
         else
         {
-            return 0
+            return actionData.count
         }
     }
     
@@ -53,9 +61,15 @@ class PatientInformationTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Information", forIndexPath: indexPath)
 
-        cell.textLabel?.text = tableData[indexPath.row]
-        cell.detailTextLabel?.text = detailData[indexPath.row]
-        
+        if indexPath.section == 0 {
+            cell.textLabel?.text = tableData[indexPath.row]
+            cell.detailTextLabel?.text = detailData[indexPath.row]
+        }
+        else
+        {
+            cell.textLabel?.text = actionData[indexPath.row]
+            cell.detailTextLabel?.text = " "
+        }
         
         
         return cell
