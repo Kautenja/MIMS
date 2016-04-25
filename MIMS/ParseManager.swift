@@ -457,9 +457,9 @@ class ParseClient {
             do {
                 try record.conditions?.addDisease(disease)
             } catch ConditionErrors.InvalidDisease {
-                error = NSError(domain: "Condition error", code: 000, userInfo: ["description" : "Bad disease name."])
+                error = NSError(domain: "Condition error", code: 000, userInfo: ["description": "Bad disease name."])
             } catch _ {
-                error = NSError(domain: "Condition error", code: 001, userInfo: ["description" : "Unknown disease error"])
+                error = NSError(domain: "Condition error", code: 001, userInfo: ["description": "Unknown disease error"])
             }
         }
         record.saveEventually()
@@ -483,7 +483,7 @@ class ParseClient {
         do {
             try record.conditions?.addCauseOfDeath(cod)
         } catch ConditionErrors.InvalidCOD {
-            error = NSError(domain: "Condition error", code: 002, userInfo: ["description" : "Invalid cause of death"])
+            error = NSError(domain: "Condition error", code: 002, userInfo: ["description": "Invalid cause of death"])
             return error
         } catch _ {
             error = NSError(domain: "Condition error", code: 003, userInfo: ["description": "Unknown cause of death error"])
@@ -506,7 +506,7 @@ class ParseClient {
             let error = NSError(domain: "User query", code: 000, userInfo: ["description": "No doctor found with name to reassign"])
             completion(success: false, error: error)
         } catch _ {
-            let error = NSError(domain: "User query", code: 001, userInfo: ["description" : "An unknown user query error occured."])
+            let error = NSError(domain: "User query", code: 001, userInfo: ["description": "An unknown user query error occured."])
             completion(success: false, error: error)
         }
     }
