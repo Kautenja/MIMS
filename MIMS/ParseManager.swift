@@ -727,9 +727,38 @@ class Treatment: PFObject, PFSubclassing {
         }
     }
     
+    var prescriptions: [Prescription]? {
+        get {return self["prescriptions"] as? [Prescription] }
+        set {if newValue != nil { self["prescriptions"] = newValue! } }
+    }
+    
+    var surgeries: [Surgery]? {
+        get {return self["surgeries"] as? [Surgery] }
+        set { if newValue != nil { self["surgeries"] = newValue! } }
+    }
+    
+    var immunizations: [Immunization]? {
+        get {return self["immunizations"] as? [Immunization]}
+        set {if newValue != nil {self["immunizations"] = newValue! } }
+    }
+    
+    func addNewScript(script: Prescription) {
+        self.prescriptions?.append(script)
+    }
+    
+    func addSurgery(surgery: Surgery) {
+        self.surgeries?.append(surgery)
+    }
+    
+    func addImmunization(immunization: Immunization) {
+        self.immunizations?.append(immunization)
+    }
+    
     class func parseClassName() -> String {
         return "Treatment"
     }
+    
+    
 }
 
 //MARK: Treatment subclass Prescription
@@ -740,7 +769,7 @@ class Treatment: PFObject, PFSubclassing {
  *  pharmacist: MIMSUser -- the pharmacist who filled the script
  *  scripts: [String] -- the prescription(s) filled
  */
-class Prescription: Treatment {
+class Prescription: PFObject, PFSubclassing  {
     
     var timeReceived: NSDate? {
         get {
@@ -825,6 +854,10 @@ class Prescription: Treatment {
     func markPrescriptionAsReceived(withDate date: NSDate) {
         self.timeReceived = date
     }
+    
+    class func parseClassName() -> String {
+        return "Prescription"
+    }
 
 }
 
@@ -832,7 +865,7 @@ class Prescription: Treatment {
 /**
  *  attendingSurgeon: MIMSUser -- the surgeon working on the patient
  */
-class Surgery: Treatment {
+class Surgery: PFObject, PFSubclassing {
     var attendingSurgeon: MIMSUser? {
         get {
             return self["attendingSurgeon"] as? MIMSUser
@@ -848,13 +881,17 @@ class Surgery: Treatment {
         self.init()
         self.attendingSurgeon = surgeon
     }
+    
+    class func parseClassName() -> String {
+        return "Surgery"
+    }
 }
 
 //MARK: Immunization Class
 /**
  *  immunizationTypes: String -- the types of immunizations received
  */
-class Immunization: Treatment {
+class Immunization: PFObject, PFSubclassing  {
     var immunizationTypes: [String]? {
         get {
             return self["immunizations"] as? [String]
@@ -869,6 +906,10 @@ class Immunization: Treatment {
     
     func addNewImmunization(immunization: String) {
         self.immunizationTypes?.append(immunization)
+    }
+    
+    class func parseClassName() -> String {
+        return "Immunization"
     }
 }
 
@@ -1314,10 +1355,25 @@ class Appointment: PFObject, PFSubclassing {
     }
 }
 
+enum UserTypes: String {
+    case AdminUser = "Admin"
+    case TechnicalUser = "Technical"
+    case OperationalUser = "Operational"
+}
+
+enum UserErrors: ErrorType {
+    case InvalidUserType
+}
+
 class MIMSUser: PFUser {
     
-    dynamic var role = PFRole()
-    dynamic var roleACL = PFACL()
+    dynamic var userType: String? {
+        get {
+            return self["userType"] as? String
+        }
+        set { if newValue != nil { self["userType"] = newValue! } }
+    }
+
     dynamic var department: Department? {
         get {
             return self["department"] as? Department
@@ -1334,79 +1390,29 @@ class MIMSUser: PFUser {
             self["institution"] = newValue
         }
     }
-    dynamic var appointment: Appointment? {
-        get {
-            return self["appointment"] as? Appointment
-        }
-        set {
-            self["appointment"] = newValue
-        }
-    }
-    
-    
-//    override class func initialize() {
-//        struct Static {
-//            static var onceToken : dispatch_once_t = 0;
-//        }
-//        dispatch_once(&Static.onceToken) {
-//            self.registerSubclass()
-//        }
-//        
-//    }
-    
-//    override init() {
-//    }
-}
 
-
-//Clerk or receptionist
-class AdminUser: MIMSUser {
-    
-    override class func initialize() {
-        struct Static {
-            static var onceToken : dispatch_once_t = 0;
+    convenience init(withUserType type: String, department: String, institution: String) throws {
+        self.init()
+        guard let userType = UserTypes(rawValue: type) else {
+            throw UserErrors.InvalidUserType
         }
-        dispatch_once(&Static.onceToken) {
-            self.registerSubclass()
+        self.userType = userType.rawValue
+        ParseClient.queryDepartments("name", value: department) { (departments, error) in
+            if error == nil && departments != nil {
+                self.department = try! Department(withName: department)
+            } else {
+                self.department = departments
+            }
+        }
+        ParseClient.queryInstitutions("name", value: institution) { (institutions, error) in
+            if error == nil && institutions != nil {
+                self.institution = Institution(initWithName: institution)
+            } else {
+                self.institution = institutions
+            }
         }
         
     }
-  
-    override init() {
-        super.init()
-        roleACL.publicReadAccess = true
-        roleACL.publicWriteAccess = true
-        role = PFRole(name: "Admin", acl: roleACL)
-        role.users.addObject(self)
-        role.saveInBackground()
-    }
-}
-
-//Lab Technician
-class TechnicalUser: MIMSUser {
-    
-    override class func initialize() {
-        struct Static {
-            static var onceToken : dispatch_once_t = 0;
-        }
-        dispatch_once(&Static.onceToken) {
-            self.registerSubclass()
-        }
-        
-    }
-
-    override init() {
-        super.init()
-        roleACL.publicReadAccess = false
-        roleACL.publicReadAccess = false
-        role = PFRole(name: "Technical", acl: roleACL)
-        role.users.addObject(self)
-        role.saveInBackground()
-    }
-}
-
-//Doctors, Nurses
-class OperationalUser: MIMSUser {
     
     override class func initialize() {
         struct Static {
@@ -1418,16 +1424,7 @@ class OperationalUser: MIMSUser {
         
     }
     
-    override init() {
-        super.init()
-        roleACL.publicReadAccess = false
-        role = PFRole(name: "Operational", acl: roleACL)
-        role.users.addObject(self)
-        role.saveInBackground()
-
-    }
 }
-
 
 enum ParseErrorCodes: ErrorType {
     case InvalidUsernameLength(message: String)
@@ -1448,14 +1445,6 @@ class ParseClient {
         }
         
         self.loginUser(username, password: password, completion: completion)
-
-//        MIMSUser.logInWithUsernameInBackground(username, password: password) { (user, error) in
-//            if error == nil && user != nil {
-//                completion(user: user! as? MIMSUser, error: nil)
-//            } else {
-//                completion(user: nil, error: error!)
-//            }
-//        }
     }
     
     private class func loginUser(name: String, password: String, completion:(error: NSError?) ->()) {
@@ -1517,6 +1506,32 @@ class ParseClient {
                 completion(patientRecords: patientRecords as? [PatientRecord], error: nil)
             } else {
                 completion(patientRecords: nil, error: error!)
+            }
+        }
+    }
+    
+    class func queryDepartments(key: String, value: String, completion: (departments: Department?, error: NSError?) ->()) {
+        let query = PFQuery(className: "Department")
+        query.whereKey(key, equalTo: value)
+        query.getFirstObjectInBackgroundWithBlock { (objects, error) in
+            if error == nil && objects != nil {
+                completion(departments: objects as? Department, error: nil)
+            }
+            else {
+                completion(departments: nil, error: error!)
+            }
+        }
+    }
+    
+    class func queryInstitutions(key: String, value: String, completion: (departments: Institution?, error: NSError?) ->()) {
+        let query = PFQuery(className: "Institution")
+        query.whereKey(key, equalTo: value)
+        query.getFirstObjectInBackgroundWithBlock { (objects, error) in
+            if error == nil && objects != nil {
+                completion(departments: objects as? Institution, error: nil)
+            }
+            else {
+                completion(departments: nil, error: error!)
             }
         }
     }
