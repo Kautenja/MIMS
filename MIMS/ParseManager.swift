@@ -79,7 +79,7 @@ class PatientRecord: PFObject, PFSubclassing {
         }
     }
     
-    var dischargeStatus: Bool? {
+    var canBeDischarged: Bool? {
         get {
             return self["dischargeStatus"] as? Bool
         }
@@ -101,6 +101,11 @@ class PatientRecord: PFObject, PFSubclassing {
         set {}
     }
     
+    var attendingPhysician: MIMSUser {
+        get {return self["doctor"] as! MIMSUser}
+        set {self["doctor"] = newValue}
+    }
+    
     func addAppointment(newAppointment: Appointment) {
         self.appointments?.append(newAppointment)
     }
@@ -113,8 +118,8 @@ class PatientRecord: PFObject, PFSubclassing {
         self.treatments?.append(newTreatment)
     }
     
-    func dischargeStatus(newStatus: Bool) {
-        self.dischargeStatus = newStatus
+    func changeDischargeStatus(newStatus: Bool) {
+        self.canBeDischarged = newStatus
     }
     
     func addScan(newScan scan: Scan) {
@@ -559,6 +564,7 @@ class Patient: PFObject, PFSubclassing {
      - parameter insuranceInfo: The patient's insurance info
      - parameter financeData:   The patient's finance data
      
+     -throws: Patient Errors.InvalidBirthday, PatientErrors.InvalidSSN, PatientErrors.InvalidName
      - returns:
      */
     convenience init(initWithInfo name: String, married: Bool, gender: Bool, birthday: NSDate, ssn: String, address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation) throws {
@@ -1551,6 +1557,69 @@ class ParseClient {
         let patientRecord = PatientRecord()
         patientRecord.patient = patient1
         patientRecord.saveEventually()
+    }
+    
+    class func addPatient(withPatientInfo address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation, name: String, maritalStatus: Bool, gender: Bool, birthday: NSDate, ssn: String, completion: (success: Bool, errorMessage: String) ->()) {
+        
+        do {
+            let newPatient = try Patient(initWithInfo: name, married: maritalStatus, gender: gender, birthday: birthday, ssn: ssn, address: address, insuranceInfo: insuranceInfo, financeData: financeData)
+            let patientRecord = PatientRecord()
+            patientRecord.patient = newPatient
+            patientRecord.canBeDischarged = false
+            //TODO: Assign a doctor to the user
+            //patientRecord.attendingPhysician = MIMSUser
+            patientRecord.saveInBackgroundWithBlock({ (success, error) in
+                if success && error == nil {
+                    completion(success: true, errorMessage: "")
+                } else {
+                    completion(success: false, errorMessage: error!.localizedDescription)
+                }
+            })
+        } catch PatientErrors.InvalidSSN {
+            completion(success: false, errorMessage: "You entered an invalid SSN. It must be exactly 9 characters.")
+        } catch PatientErrors.InvalidName {
+            completion(success: false, errorMessage: "You entered an invalid name. It cannot be empty.")
+        } catch PatientErrors.InvalidBrthday {
+            completion(success: false, errorMessage: "You entered an invalid birthday. The birthday must not be in the future.")
+        } catch _ {
+            completion(success: false, errorMessage: "An unknown error occured. Please try again.")
+        }
+    }
+    
+    private class func findDoctorToAssign(completion: (newDoctor: MIMSUser?, error: NSError?) ->()) {
+        let count = PFUser.query()!
+        count.countObjectsInBackgroundWithBlock { (countedUsers, error) in
+            if error == nil {
+                let query = PFUser.query()!
+                query.whereKey("userType", equalTo: UserTypes.OperationalUser.rawValue)
+                query.limit = 1
+                query.skip = Int(arc4random_uniform(UInt32(countedUsers))+0)
+                query.getFirstObjectInBackgroundWithBlock({ (newDoctor, error) in
+                    if error == nil && newDoctor != nil {
+                        completion(newDoctor: newDoctor as? MIMSUser, error: nil)
+                    } else {
+                        completion(newDoctor: nil, error: error!)
+                    }
+                })
+
+            } else {
+                completion(newDoctor: nil, error: error!)
+            }
+        }
+    }
+    class func deletePatient(withPatientRecord record: PatientRecord, completion: (success: Bool, error: NSError?) ->()) {
+        if record.canBeDischarged! {
+            record.deleteInBackgroundWithBlock { (success, error) in
+                if success && error == nil {
+                    completion(success: true, error: nil)
+                } else {
+                    completion(success: false, error: error!)
+                }
+            }
+        } else {
+            let error = NSError(domain: "Patient", code: 001, userInfo: ["description": "The patient is not eleigible for discharge."])
+            completion(success: false, error: error)
+        }
     }
     
 }
