@@ -1781,6 +1781,48 @@ class ParseClient {
 //        }
 //    }
     
+    class func addAllergies(newAllergies: [String], toPatientRecord record: PatientRecord) -> NSError? {
+        var error: NSError?
+        for allergy in newAllergies {
+            do {
+                try record.conditions?.addAllergy(allergy)
+            } catch ConditionErrors.InvalidAllergy {
+                error = NSError(domain: "Condition error", code: 000, userInfo: ["description" : "Bad allergy name."])
+            } catch _ {
+                error = NSError(domain: "Condition error", code: 001, userInfo: ["description" : "Unknown allergy error"])
+            }
+        }
+        return error
+    }
+    
+    class func addDisorders(newDisorders: [String], toPatientRecord record: PatientRecord) -> NSError? {
+        var error: NSError?
+        for disorder in newDisorders {
+            do {
+                try record.conditions?.addDisorder(disorder)
+            } catch ConditionErrors.InvalidDisorder {
+                error = NSError(domain: "Condition error", code: 000, userInfo: ["description" : "Bad disorder name."])
+            } catch _ {
+                error = NSError(domain: "Condition error", code: 001, userInfo: ["description" : "Unknown disorder error"])
+            }
+        }
+        return error
+    }
+    
+    class func addDiseases(newDiseases: [String], toPatientRecord record: PatientRecord) -> NSError? {
+        var error: NSError?
+        for disease in newDiseases {
+            do {
+                try record.conditions?.addDisease(disease)
+            } catch ConditionErrors.InvalidDisease {
+                error = NSError(domain: "Condition error", code: 000, userInfo: ["description" : "Bad disease name."])
+            } catch _ {
+                error = NSError(domain: "Condition error", code: 001, userInfo: ["description" : "Unknown disease error"])
+            }
+        }
+        return error
+    }
+    
     private class func findPharmacistToAssign(completion: (newPharmacist: MIMSUser?, error: NSError?) ->()) {
         let count = PFUser.query()!
         count.countObjectsInBackgroundWithBlock { (countedUsers, error) in
