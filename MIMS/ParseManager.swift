@@ -88,6 +88,11 @@ class PatientRecord: PFObject, PFSubclassing {
         }
     }
     
+    var active: Bool {
+        get {return self["activeStatus"] as! Bool}
+        set{self["activeStatus"] = newValue}
+    }
+    
     //scans
     var scansTaken: [Scan]? {
         get {return self["scans"] as? [Scan] }
@@ -99,6 +104,11 @@ class PatientRecord: PFObject, PFSubclassing {
     var testsTaken: [Test]? {
         get {return self["tests"] as? [Test]}
         set {}
+    }
+    
+    var prescribedMedications: [Prescription]? {
+        get {return self["prescriptions"] as? [Prescription]}
+        set{}
     }
     
     var attendingPhysician: MIMSUser {
@@ -122,12 +132,20 @@ class PatientRecord: PFObject, PFSubclassing {
         self.canBeDischarged = newStatus
     }
     
+    func changeActiveStatus(newStatus: Bool) {
+        self.active = newStatus
+    }
+    
     func addScan(newScan scan: Scan) {
         self.scansTaken?.append(scan)
     }
     
     func addTest(newTest test: Test) {
         self.testsTaken?.append(test)
+    }
+    
+    func addPrescription(newPrescription script: Prescription) {
+        self.prescribedMedications?.append(script)
     }
     
     class func parseClassName() -> String {
@@ -204,6 +222,10 @@ class FinancialInformation: PFObject, PFSubclassing {
         }
         self.paymentInfo = paymentInfo
         self.outstandingBalance = balance
+    }
+    
+    func clearBalance() {
+        self.outstandingBalance = 0
     }
     
     class func parseClassName() -> String {
@@ -1265,6 +1287,7 @@ class Condition: PFObject, PFSubclassing {
     }
 }
 
+//MARK: Test Class
 class Test: PFObject, PFSubclassing {
     
     var timeCreated: NSDate? {
@@ -1559,22 +1582,42 @@ class ParseClient {
         patientRecord.saveEventually()
     }
     
-    class func addPatient(withPatientInfo address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation, name: String, maritalStatus: Bool, gender: Bool, birthday: NSDate, ssn: String, completion: (success: Bool, errorMessage: String) ->()) {
+    /**
+     Method to be called when a patient is being admitted to the hospital for the first time.
+     
+     - parameter address:       The patient's address
+     - parameter insuranceInfo: The patient's insurance info
+     - parameter financeData:   The patient's finance data
+     - parameter name:          The patient's name
+     - parameter maritalStatus: The patient's maritial status
+     - parameter gender:        The patient's gender
+     - parameter birthday:      The patient's birthday
+     - parameter ssn:           The patient's SSN
+     - parameter completion:    A completion called upon successful or unsuccessful adding of the patient. If unsuccessful, the error message will not be empty and success will be false. Otherwise success will be true with an empty error message.
+     */
+    class func admitPatient(withPatientInfo address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation, name: String, maritalStatus: Bool, gender: Bool, birthday: NSDate, ssn: String, completion: (success: Bool, errorMessage: String) ->()) {
         
         do {
             let newPatient = try Patient(initWithInfo: name, married: maritalStatus, gender: gender, birthday: birthday, ssn: ssn, address: address, insuranceInfo: insuranceInfo, financeData: financeData)
             let patientRecord = PatientRecord()
             patientRecord.patient = newPatient
             patientRecord.canBeDischarged = false
-            //TODO: Assign a doctor to the user
-            //patientRecord.attendingPhysician = MIMSUser
-            patientRecord.saveInBackgroundWithBlock({ (success, error) in
-                if success && error == nil {
-                    completion(success: true, errorMessage: "")
+            patientRecord.active = true
+            findDoctorToAssign({ (newDoctor, error) in
+                if newDoctor != nil && error == nil {
+                    patientRecord.attendingPhysician = newDoctor!
+                    patientRecord.saveInBackgroundWithBlock({ (success, error) in
+                        if success && error == nil {
+                            completion(success: true, errorMessage: "")
+                        } else {
+                            completion(success: false, errorMessage: error!.localizedDescription)
+                        }
+                    })
                 } else {
-                    completion(success: false, errorMessage: error!.localizedDescription)
+                    completion(success: false, errorMessage: "Unable to assign a new doctor!")
                 }
             })
+            
         } catch PatientErrors.InvalidSSN {
             completion(success: false, errorMessage: "You entered an invalid SSN. It must be exactly 9 characters.")
         } catch PatientErrors.InvalidName {
@@ -1586,6 +1629,11 @@ class ParseClient {
         }
     }
     
+    /**
+     A private function to find a random doctor to assign to a new patient. Not the best implemetation of finding a doctor to assign but ya know, it will do.
+     
+     - parameter completion: If there's a new doctor to assign, the parameter will be filled, otherwise there will be an error.
+     */
     private class func findDoctorToAssign(completion: (newDoctor: MIMSUser?, error: NSError?) ->()) {
         let count = PFUser.query()!
         count.countObjectsInBackgroundWithBlock { (countedUsers, error) in
@@ -1607,6 +1655,13 @@ class ParseClient {
             }
         }
     }
+    
+    /**
+     Method to call when the "Delete patient record" button has been called. It makes the checks for whether or not the patient record is able to be deleted, so no need to worry about checking it yourself.
+     
+     - parameter record:     The patient record to be deleted
+     - parameter completion: If successful, success will be true, and error will be nil, otherwise success will be false and error will contain the error with a "description" userInfo property to be accessed for the error message.
+     */
     class func deletePatient(withPatientRecord record: PatientRecord, completion: (success: Bool, error: NSError?) ->()) {
         if record.canBeDischarged! {
             record.deleteInBackgroundWithBlock { (success, error) in
@@ -1622,4 +1677,130 @@ class ParseClient {
         }
     }
     
+    /**
+     Method to call when the "Charge Patient" button is pressed. It will clear out the patient's balance (in a real implementation it would do hella things like generate receipts and etc. but here we're just zeroing out and then saying that he patient is now able to be discharged.
+     
+     - parameter record:     The patient record
+     - parameter patient:    The patient themself
+     - parameter completion: Called with the success status
+     */
+    class func chargePatient(fromPatientRecord record: PatientRecord, andPatient patient: Patient, completion: (success: Bool) ->()) {
+        patient.fetchInBackgroundWithBlock { (updatedPatient, error) in
+            if error == nil {
+                let financeData = (updatedPatient as! Patient).financials
+                financeData?.clearBalance()
+                record.canBeDischarged = true
+                completion(success: true)
+            } else {
+                completion(success: false)
+            }
+        }
+    }
+    
+    /**
+     Method to call to manage a patient's insurance information. It takes the whole constructor and creates a new entry which is then returned
+     
+     - parameter date:        The expiration date
+     - parameter memberID:    The member ID
+     - parameter groupID:     The group ID
+     - parameter copayAmount: The copay percentage
+     - parameter completion:  Called with the new insurance record to be saved by the callee or an error if the record couldn't be generated.
+     */
+    class func managePatientInsurance(withExpirationDate date: NSDate, memberID: String, groupID: String, copayAmount: Int, completion: (insuranceInfo: InsuranceInfo?, error: String) ->()) {
+        do {
+            let newInsuranceInfo = try InsuranceInfo(initWith: date, memID: memberID, grpID: groupID, amount: copayAmount)
+            completion(insuranceInfo: newInsuranceInfo, error: "")
+            
+        } catch InsuranceError.InvalidExpirationDate {
+            completion(insuranceInfo: nil, error: "You entered an invalid expiration date! The policy cannot be expired already.")
+        } catch InsuranceError.InvalidInsuranceInformation {
+            completion(insuranceInfo: nil, error: "You entered invalid insurance information.")
+        } catch _ {
+            completion(insuranceInfo: nil, error: "An unknown error occured. Please try again.")
+        }
+    }
+    
+    /**
+     Method to call when you want to discharge a patient. It checks if they can be discharged, adn if they can (meaning they're balance has previously been cleared (which isn't the best way to allow someone to leave ina real hospital system) and is now set to 0, then their status is set to active.
+     
+     - parameter patientRecord: The patient's record to discharge
+     
+     - returns: True if the patient is able to be discharged, false otherwise
+     */
+    class func dischargePatient(patientRecord: PatientRecord) ->Bool {
+        
+        if patientRecord.canBeDischarged! {
+            patientRecord.changeActiveStatus(false)
+            patientRecord.saveEventually()
+            return true
+        }
+        return false
+    }
+    
+    //TODO: Might have to work on this function. Currently only saves modified information but might need to make it more specific.
+    class func saveModifiedPatientInfo(modifiedRecord: PatientRecord) {
+        modifiedRecord.saveInBackground()
+    }
+    
+    class func addPatientTests(newlyRequestedTests: [String], toPatientRecord record: PatientRecord) {
+        for testDescription in newlyRequestedTests {
+            record.addTest(newTest: Test(initWithTestDescription: testDescription))
+        }
+    }
+    
+    class func markTestsAsCompleted(newlyCompletedTests: [Test], fromPatientRecord record: PatientRecord) {
+        for test in newlyCompletedTests {
+            test.completedStatus = true
+            test.saveInBackground()
+        }
+    }
+    
+    class func addNewPrescription(newlyRequestedScripts: [Prescription], toRecord record: PatientRecord) {
+        for script in newlyRequestedScripts {
+            record.addPrescription(newPrescription: script)
+        }
+    }
+    
+    //TODO: This implementation won't work
+//    class func addNewSymptoms(newlyAddedSymptoms: [String], toPatientRecord record: PatientRecord) -> String {
+//        for symptom in newlyAddedSymptoms {
+//            let condition = Condition()
+//            do {
+//                try condition.addAllergy(symptom)
+//                try condition.addDisease(symptom)
+//                try condition.addDisorder(symptom)
+//            } catch ConditionErrors.InvalidAllergy {
+//                return "
+//            } catch ConditionErrors.InvalidDisease {
+//                
+//            } catch ConditionErrors.InvalidDisorder {
+//                
+//            } catch _ {
+//                
+//            }
+//        }
+//    }
+    
+    private class func findPharmacistToAssign(completion: (newPharmacist: MIMSUser?, error: NSError?) ->()) {
+        let count = PFUser.query()!
+        count.countObjectsInBackgroundWithBlock { (countedUsers, error) in
+            if error == nil {
+                let query = PFUser.query()!
+                query.whereKey("userType", equalTo: UserTypes.TechnicalUser.rawValue)
+                query.whereKey("type", equalTo: "Pharmacist")
+                query.limit = 1
+                query.skip = Int(arc4random_uniform(UInt32(countedUsers))+0)
+                query.getFirstObjectInBackgroundWithBlock({ (pharmacist, error) in
+                    if error == nil && pharmacist != nil {
+                        completion(newPharmacist: pharmacist as? MIMSUser, error: nil)
+                    } else {
+                        completion(newPharmacist: nil, error: error!)
+                    }
+                })
+                
+            } else {
+                completion(newPharmacist: nil, error: error!)
+            }
+        }
+    }
 }
