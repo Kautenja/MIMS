@@ -42,11 +42,12 @@ class PatientRecord: PFObject, PFSubclassing {
         set {}
     }
     
-    var treatments: [Treatment]? {
+    //Should only have one treatment object, which can have arrays of prescriptions, immunizations, and surgeries
+    var treatments: Treatment? {
         get {
-            return self["treatments"] as? [Treatment]
+            return self["treatments"] as? Treatment
         }
-        set {}
+        set {if newValue != nil {self["treatments"] = newValue! }}
     }
     
     var comments: [String]? {
@@ -106,11 +107,6 @@ class PatientRecord: PFObject, PFSubclassing {
         set {}
     }
     
-    var prescribedMedications: [Prescription]? {
-        get {return self["prescriptions"] as? [Prescription]}
-        set{}
-    }
-    
     var attendingPhysician: MIMSUser {
         get {return self["doctor"] as! MIMSUser}
         set {self["doctor"] = newValue}
@@ -122,10 +118,6 @@ class PatientRecord: PFObject, PFSubclassing {
     
     func addComment(newComment: String) {
         self.comments?.append(newComment)
-    }
-    
-    func addNewTreatment(newTreatment: Treatment) {
-        self.treatments?.append(newTreatment)
     }
     
     func changeDischargeStatus(newStatus: Bool) {
@@ -144,9 +136,7 @@ class PatientRecord: PFObject, PFSubclassing {
         self.testsTaken?.append(test)
     }
     
-    func addPrescription(newPrescription script: Prescription) {
-        self.prescribedMedications?.append(script)
-    }
+
     
     class func parseClassName() -> String {
         return "PatientRecord"
@@ -1755,31 +1745,65 @@ class ParseClient {
         }
     }
     
-    class func addNewPrescription(newlyRequestedScripts: [Prescription], toRecord record: PatientRecord) {
-        for script in newlyRequestedScripts {
-            record.addPrescription(newPrescription: script)
+    class func addNewPrescription(newlyRequestedScripts: [Prescription], toRecord record: PatientRecord, completion: (error: NSError?)->()) {
+        guard let treatments = record.treatments else {
+            let error = NSError(domain: "Patient Treatments", code: 000, userInfo: ["description" : "Unable to retrieve treatments!"])
+            completion(error: error)
+            return
+        }
+        treatments.fetchInBackgroundWithBlock { (newTreatments, error) in
+            if error == nil {
+                for script in newlyRequestedScripts {
+                    (newTreatments as! Treatment).addNewScript(script)
+                }
+                newTreatments?.saveEventually()
+                completion(error: nil)
+            } else {
+                completion(error: error!)
+            }
         }
     }
     
-    //TODO: This implementation won't work
-//    class func addNewSymptoms(newlyAddedSymptoms: [String], toPatientRecord record: PatientRecord) -> String {
-//        for symptom in newlyAddedSymptoms {
-//            let condition = Condition()
-//            do {
-//                try condition.addAllergy(symptom)
-//                try condition.addDisease(symptom)
-//                try condition.addDisorder(symptom)
-//            } catch ConditionErrors.InvalidAllergy {
-//                return "
-//            } catch ConditionErrors.InvalidDisease {
-//                
-//            } catch ConditionErrors.InvalidDisorder {
-//                
-//            } catch _ {
-//                
-//            }
-//        }
-//    }
+    class func addNewSurgeries(newlyRequeustedSurgeries: [Surgery], toRecord record: PatientRecord, completion: (error: NSError?) ->()) {
+        guard let treatments = record.treatments else {
+            let error = NSError(domain: "Patient Treatments", code: 000, userInfo: ["description" : "Unable to retrieve treatments!"])
+            completion(error: error)
+            return
+        }
+        
+        treatments.fetchInBackgroundWithBlock { (newTreatments, error) in
+            if error == nil {
+                for surgery in newlyRequeustedSurgeries {
+                    (newTreatments as! Treatment).addSurgery(surgery)
+                }
+                newTreatments?.saveEventually()
+                completion(error: nil)
+            } else {
+                completion(error: error!)
+            }
+        }
+    }
+    
+    class func addNewImmunizations(newlyRequeustedImmunizations: [Immunization], toRecord record: PatientRecord, completion: (error: NSError?) ->()) {
+        guard let treatments = record.treatments else {
+            let error = NSError(domain: "Patient Treatments", code: 000, userInfo: ["description" : "Unable to retrieve treatments!"])
+            completion(error: error)
+            return
+        }
+        
+        treatments.fetchInBackgroundWithBlock { (newTreatments, error) in
+            if error == nil {
+                for immunization in newlyRequeustedImmunizations {
+                    (newTreatments as! Treatment).addImmunization(immunization)
+                }
+                newTreatments?.saveEventually()
+                completion(error: nil)
+            } else {
+                completion(error: error!)
+            }
+        }
+    }
+    
     
     class func addAllergies(newAllergies: [String], toPatientRecord record: PatientRecord) -> NSError? {
         var error: NSError?
@@ -1792,6 +1816,7 @@ class ParseClient {
                 error = NSError(domain: "Condition error", code: 001, userInfo: ["description" : "Unknown allergy error"])
             }
         }
+        record.saveEventually()
         return error
     }
     
@@ -1806,6 +1831,7 @@ class ParseClient {
                 error = NSError(domain: "Condition error", code: 001, userInfo: ["description" : "Unknown disorder error"])
             }
         }
+        record.saveEventually()
         return error
     }
     
@@ -1820,8 +1846,35 @@ class ParseClient {
                 error = NSError(domain: "Condition error", code: 001, userInfo: ["description" : "Unknown disease error"])
             }
         }
+        record.saveEventually()
         return error
     }
+    
+    class func transferPatient(toNewDoctorWithName name: String, withPatientRecord record: PatientRecord, completion: (success: Bool, error: NSError?) ->()) {
+        do {
+            try queryUsers("name", value: name, completion: { (users, error) in
+                if users != nil && error == nil {
+                    record.attendingPhysician = users!.first!
+                    completion(success: true, error: nil)
+                } else {
+                    completion(success: false, error: error!)
+                }
+            })
+        } catch ParseErrorCodes.InvalidKey(message: _) {
+            let error = NSError(domain: "User query", code: 000, userInfo: ["description": "No doctor found with name to reassign"])
+            completion(success: false, error: error)
+        } catch _ {
+            let error = NSError(domain: "User query", code: 001, userInfo: ["description" : "An unknown user query error occured."])
+            completion(success: false, error: error)
+        }
+    }
+    
+    class func addScan(newlyRequestedScans: [Scan], toPatientRecord record: PatientRecord) {
+        for scan in newlyRequestedScans {
+            record.addScan(newScan: scan)
+        }
+    }
+    
     
     private class func findPharmacistToAssign(completion: (newPharmacist: MIMSUser?, error: NSError?) ->()) {
         let count = PFUser.query()!
