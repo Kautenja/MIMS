@@ -180,33 +180,6 @@ class ParseClient {
     }
     
     /**
-     A private function to find a random doctor to assign to a new patient. Not the best implemetation of finding a doctor to assign but ya know, it will do.
-     
-     - parameter completion: If there's a new doctor to assign, the parameter will be filled, otherwise there will be an error.
-     */
-    private class func findDoctorToAssign(completion: (newDoctor: MIMSUser?, error: NSError?) ->()) {
-        let count = PFUser.query()!
-        count.countObjectsInBackgroundWithBlock { (countedUsers, error) in
-            if error == nil {
-                let query = PFUser.query()!
-                query.whereKey("userType", equalTo: UserTypes.OperationalUser.rawValue)
-                query.limit = 1
-                query.skip = Int(arc4random_uniform(UInt32(countedUsers))+0)
-                query.getFirstObjectInBackgroundWithBlock({ (newDoctor, error) in
-                    if error == nil && newDoctor != nil {
-                        completion(newDoctor: newDoctor as? MIMSUser, error: nil)
-                    } else {
-                        completion(newDoctor: nil, error: error!)
-                    }
-                })
-
-            } else {
-                completion(newDoctor: nil, error: error!)
-            }
-        }
-    }
-    
-    /**
      Method to call when the "Delete patient record" button has been called. It makes the checks for whether or not the patient record is able to be deleted, so no need to worry about checking it yourself.
      
      - parameter record:     The patient record to be deleted
@@ -467,7 +440,7 @@ class ParseClient {
     }
     
     /**
-     Method to add a new cause of death. Can only be assigned if a cause of death hasn't already been assigned.add
+     Method to add a new cause of death. Can only be assigned if a cause of death hasn't already been assigned
      
      - parameter newCOD: The new newCOD
      - parameter record: The patient record
@@ -477,7 +450,7 @@ class ParseClient {
     class func addNewCauseOfDeath(newCOD cod: String, toPatientRecord record: PatientRecord) -> NSError? {
         var error: NSError?
         if let _ = record.conditions?.causeOfDeath {
-            error = NSError(domain: "Condition error", code: 004, userInfo: ["description": "Cause of Death can only be assigned once!"])
+            error = NSError(domain: "Condition error", code: 004, userInfo: ["description": "Cause of Death can only be assigned once! Patient cannot die more than once."])
             return error
         }
         do {
@@ -492,6 +465,13 @@ class ParseClient {
         return nil
     }
     
+    /**
+     Method to try to transfer a patient to another doctor. Will check if the name is valid and if it is will assign the new doctor, otherwise it will return an error.
+     
+     - parameter name:       The name of the new doctor to assign the patient to
+     - parameter record:     The patient record
+     - parameter completion: Called with the result, success if a doctor was found, or error otherwise
+     */
     class func transferPatient(toNewDoctorWithName name: String, withPatientRecord record: PatientRecord, completion: (success: Bool, error: NSError?) ->()) {
         do {
             try queryUsers("name", value: name, completion: { (users, error) in
@@ -511,20 +491,58 @@ class ParseClient {
         }
     }
     
+    /**
+     Method to add a new set of scans to the patient record.
+     
+     - parameter newlyRequestedScans: The set of newly requeusted scans
+     - parameter record:              The patient record to add to
+     */
     class func addScan(newlyRequestedScans: [Scan], toPatientRecord record: PatientRecord) {
         for scan in newlyRequestedScans {
             record.addScan(newScan: scan)
         }
     }
     
+    /**
+     A private function to find a random doctor to assign to a new patient. Not the best implemetation of finding a doctor to assign but ya know, it will do.
+     
+     - parameter completion: If there's a new doctor to assign, the parameter will be filled, otherwise there will be an error.
+     */
+    private class func findDoctorToAssign(completion: (newDoctor: MIMSUser?, error: NSError?) ->()) {
+        let count = PFUser.query()!
+        count.countObjectsInBackgroundWithBlock { (countedUsers, error) in
+            if error == nil {
+                let query = PFUser.query()!
+                query.whereKey("userType", equalTo: UserTypes.OperationalUser.rawValue)
+                query.limit = 1
+                query.skip = Int(arc4random_uniform(UInt32(countedUsers))+0)
+                query.getFirstObjectInBackgroundWithBlock({ (newDoctor, error) in
+                    if error == nil && newDoctor != nil {
+                        completion(newDoctor: newDoctor as? MIMSUser, error: nil)
+                    } else {
+                        completion(newDoctor: nil, error: error!)
+                    }
+                })
+                
+            } else {
+                completion(newDoctor: nil, error: error!)
+            }
+        }
+    }
     
+    /**
+     A private function to find a random pharmacist to assign to a new prescription.
+     
+     - parameter completion: A new pharmacist to assign to the prescription, or an error if one can't be found.
+     */
     private class func findPharmacistToAssign(completion: (newPharmacist: MIMSUser?, error: NSError?) ->()) {
+        let department = try! Department(name: "Pharmacy")
         let count = PFUser.query()!
         count.countObjectsInBackgroundWithBlock { (countedUsers, error) in
             if error == nil {
                 let query = PFUser.query()!
                 query.whereKey("userType", equalTo: UserTypes.TechnicalUser.rawValue)
-                query.whereKey("type", equalTo: "Pharmacist")
+                query.whereKey("department", equalTo: department)
                 query.limit = 1
                 query.skip = Int(arc4random_uniform(UInt32(countedUsers))+0)
                 query.getFirstObjectInBackgroundWithBlock({ (pharmacist, error) in
