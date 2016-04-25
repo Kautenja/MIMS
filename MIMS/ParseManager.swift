@@ -126,7 +126,7 @@ class PatientRecord: PFObject, PFSubclassing {
     }
     
     class func parseClassName() -> String {
-        return "Patient Record"
+        return "PatientRecord"
     }
 }
 
@@ -202,7 +202,7 @@ class FinancialInformation: PFObject, PFSubclassing {
     }
     
     class func parseClassName() -> String {
-        return "Financial Information"
+        return "FinancialInformation"
     }
 }
 
@@ -434,7 +434,7 @@ class InsuranceInfo: PFObject, PFSubclassing {
     
     
     class func parseClassName() ->String {
-        return "Insurance Information"
+        return "InsuranceInformation"
     }
 }
 
@@ -1276,6 +1276,11 @@ class Test: PFObject, PFSubclassing {
         set { if newValue != nil { self["testDescription"] = newValue! } }
     }
     
+    var completedStatus: Bool? {
+        get { return self["completed"] as? Bool }
+        set { if newValue != nil {self["completed"] = newValue! }}
+    }
+    
     convenience init(initWithTestDescription description: String) {
         self.init()
         self.testDescription = description
@@ -1499,7 +1504,7 @@ class ParseClient {
     }
     
     class func queryPatientRecords(key: String, value: AnyObject, completion: (patientRecords: [PatientRecord]?, error: NSError?) ->()) {
-        let query = PFQuery(className: "Patient Record")
+        let query = PFQuery(className: "PatientRecord")
         query.whereKey(key, equalTo: value)
         query.findObjectsInBackgroundWithBlock { (patientRecords, error) in
             if patientRecords != nil && error == nil {
@@ -1535,4 +1540,17 @@ class ParseClient {
             }
         }
     }
+    
+    class func addPatientData() {
+        let address = Address()
+        try! address.newAddress("111 Test Street", city: "Auburn:", state: "AL", zip: "36832")
+        let insuarnceInfo = try! InsuranceInfo(initWith: NSDate(), memID: "11111111", grpID: "13e90093", amount: 10)
+        let finance = try! FinancialInformation(initWithAllInfo: "some user's payment info", balance: 10)
+        let patient1 = try! Patient(initWithInfo: "John Doe", married: false, gender: true, birthday: NSDate(), ssn: "291822910", address: address, insuranceInfo: insuarnceInfo, financeData: finance)
+        patient1.saveEventually()
+        let patientRecord = PatientRecord()
+        patientRecord.patient = patient1
+        patientRecord.saveEventually()
+    }
+    
 }

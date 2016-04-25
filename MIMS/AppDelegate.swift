@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Treatment.registerSubclass()
         Prescription.registerSubclass()
         MIMSUser.registerSubclass()
+
         //Surgery.registerSubclass()
         //Immunization.registerSubclass()
 

@@ -18,7 +18,6 @@
 		8F0CD4291CB737F500615490 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F0CD4281CB737F500615490 /* Assets.xcassets */; };
 		8F0CD42C1CB737F500615490 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F0CD42A1CB737F500615490 /* LaunchScreen.storyboard */; };
 		8F0CD4371CB737F500615490 /* MIMSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4361CB737F500615490 /* MIMSTests.swift */; };
-		8F0CD4431CB7388300615490 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0CD4421CB7388300615490 /* DatabaseManager.swift */; };
 		8F1E0F551CC1EC8300FE92EB /* ParseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1E0F541CC1EC8300FE92EB /* ParseTests.swift */; };
 		8F27425E1CC9B9B000D7B4B6 /* PatientTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F27425D1CC9B9B000D7B4B6 /* PatientTableViewController.swift */; };
 		8F2742611CC9BD2900D7B4B6 /* AppointmentsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2742601CC9BD2900D7B4B6 /* AppointmentsTableViewController.swift */; };
@@ -63,7 +62,6 @@
 		8F0CD4321CB737F500615490 /* MIMSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MIMSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F0CD4361CB737F500615490 /* MIMSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMSTests.swift; sourceTree = "<group>"; };
 		8F0CD4381CB737F500615490 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8F0CD4421CB7388300615490 /* DatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		8F1E0F541CC1EC8300FE92EB /* ParseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseTests.swift; sourceTree = "<group>"; };
 		8F27425D1CC9B9B000D7B4B6 /* PatientTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientTableViewController.swift; sourceTree = "<group>"; };
 		8F2742601CC9BD2900D7B4B6 /* AppointmentsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentsTableViewController.swift; sourceTree = "<group>"; };
@@ -191,7 +189,6 @@
 		8F0CD4411CB7387000615490 /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				8F0CD4421CB7388300615490 /* DatabaseManager.swift */,
 				17A2638E1CC140F40092B027 /* ParseManager.swift */,
 			);
 			name = Database;
@@ -473,7 +470,6 @@
 				8FF2F8EF1CC5270000E207B3 /* SWRevealViewController.m in Sources */,
 				8F27425E1CC9B9B000D7B4B6 /* PatientTableViewController.swift in Sources */,
 				17A2638F1CC140F40092B027 /* ParseManager.swift in Sources */,
-				8F0CD4431CB7388300615490 /* DatabaseManager.swift in Sources */,
 				8F2742611CC9BD2900D7B4B6 /* AppointmentsTableViewController.swift in Sources */,
 				8F6AFF8B1CC6A8D900A8A1F0 /* RevealViewTableViewController.swift in Sources */,
 				8F6AFF8D1CC6ABB900A8A1F0 /* Constants.swift in Sources */,
