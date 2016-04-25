@@ -727,9 +727,38 @@ class Treatment: PFObject, PFSubclassing {
         }
     }
     
+    var prescriptions: [Prescription]? {
+        get {return self["prescriptions"] as? [Prescription] }
+        set {if newValue != nil { self["prescriptions"] = newValue! } }
+    }
+    
+    var surgeries: [Surgery]? {
+        get {return self["surgeries"] as? [Surgery] }
+        set { if newValue != nil { self["surgeries"] = newValue! } }
+    }
+    
+    var immunizations: [Immunization]? {
+        get {return self["immunizations"] as? [Immunization]}
+        set {if newValue != nil {self["immunizations"] = newValue! } }
+    }
+    
+    func addNewScript(script: Prescription) {
+        self.prescriptions?.append(script)
+    }
+    
+    func addSurgery(surgery: Surgery) {
+        self.surgeries?.append(surgery)
+    }
+    
+    func addImmunization(immunization: Immunization) {
+        self.immunizations?.append(immunization)
+    }
+    
     class func parseClassName() -> String {
         return "Treatment"
     }
+    
+    
 }
 
 //MARK: Treatment subclass Prescription
@@ -740,7 +769,7 @@ class Treatment: PFObject, PFSubclassing {
  *  pharmacist: MIMSUser -- the pharmacist who filled the script
  *  scripts: [String] -- the prescription(s) filled
  */
-class Prescription: Treatment {
+class Prescription: PFObject, PFSubclassing  {
     
     var timeReceived: NSDate? {
         get {
@@ -825,6 +854,10 @@ class Prescription: Treatment {
     func markPrescriptionAsReceived(withDate date: NSDate) {
         self.timeReceived = date
     }
+    
+    class func parseClassName() -> String {
+        return "Prescription"
+    }
 
 }
 
@@ -832,7 +865,7 @@ class Prescription: Treatment {
 /**
  *  attendingSurgeon: MIMSUser -- the surgeon working on the patient
  */
-class Surgery: Treatment {
+class Surgery: PFObject, PFSubclassing {
     var attendingSurgeon: MIMSUser? {
         get {
             return self["attendingSurgeon"] as? MIMSUser
@@ -848,13 +881,17 @@ class Surgery: Treatment {
         self.init()
         self.attendingSurgeon = surgeon
     }
+    
+    class func parseClassName() -> String {
+        return "Surgery"
+    }
 }
 
 //MARK: Immunization Class
 /**
  *  immunizationTypes: String -- the types of immunizations received
  */
-class Immunization: Treatment {
+class Immunization: PFObject, PFSubclassing  {
     var immunizationTypes: [String]? {
         get {
             return self["immunizations"] as? [String]
@@ -869,6 +906,10 @@ class Immunization: Treatment {
     
     func addNewImmunization(immunization: String) {
         self.immunizationTypes?.append(immunization)
+    }
+    
+    class func parseClassName() -> String {
+        return "Immunization"
     }
 }
 
