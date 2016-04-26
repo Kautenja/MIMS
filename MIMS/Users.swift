@@ -45,6 +45,11 @@ class MIMSUser: PFUser {
         }
     }
     
+    var appointments: [Appointment]? {
+        get {return self["appointments"] as? [Appointment]}
+        set {}
+    }
+    
     convenience init(withUserType type: String, department: String, institution: String) throws {
         self.init()
         guard let userType = UserTypes(rawValue: type) else {

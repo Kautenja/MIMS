@@ -40,8 +40,14 @@ class FinancialInformation: PFObject, PFSubclassing {
         set {
             if newValue != nil && newValue >= 0 {
                 self["outstandingBalance"] = newValue!
+                self.goodStanding = false
             }
         }
+    }
+    
+    var goodStanding: Bool? {
+        get {return self["standing"] as? Bool}
+        set{if newValue != nil {self["standing"] = newValue!}}
     }
     
     /**
@@ -58,6 +64,7 @@ class FinancialInformation: PFObject, PFSubclassing {
         }
         self.paymentInfo = paymentInfo
         self.outstandingBalance = 0
+        self.goodStanding = true
     }
     
     /**
@@ -78,10 +85,19 @@ class FinancialInformation: PFObject, PFSubclassing {
         }
         self.paymentInfo = paymentInfo
         self.outstandingBalance = balance
+        self.goodStanding = true
+        if balance > 0 {
+            self.goodStanding = false
+        }
     }
     
     func clearBalance() {
         self.outstandingBalance = 0
+        self.goodStanding = true
+    }
+    
+    func inGoodStanding() -> Bool {
+        return goodStanding!
     }
     
     class func parseClassName() -> String {
@@ -175,6 +191,9 @@ class InsuranceInfo: PFObject, PFSubclassing {
         self.copay = amount
     }
     
+    func isExpired() -> Bool {
+        return expirationDate < NSDate()
+    }
     
     class func parseClassName() ->String {
         return "InsuranceInformation"

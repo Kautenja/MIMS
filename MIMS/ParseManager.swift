@@ -145,10 +145,10 @@ class ParseClient {
      - parameter ssn:           The patient's SSN
      - parameter completion:    A completion called upon successful or unsuccessful adding of the patient. If unsuccessful, the error message will not be empty and success will be false. Otherwise success will be true with an empty error message.
      */
-    class func admitPatient(withPatientInfo address: Address, insuranceInfo: InsuranceInfo, financeData: FinancialInformation, name: String, maritalStatus: Bool, gender: Bool, birthday: NSDate, ssn: String, phone: String, completion: (success: Bool, errorMessage: String) ->()) {
+    class func admitPatient(withPatientInfo address: Address, insuranceInfo: InsuranceInfo, financeInfo: FinancialInformation, name: String, maritalStatus: Bool, gender: Bool, birthday: NSDate, ssn: String, phone: String, completion: (success: Bool, errorMessage: String) ->()) {
         
         do {
-            let newPatient = try Patient(initWithInfo: name, married: maritalStatus, gender: gender, birthday: birthday, ssn: ssn, address: address, insuranceInfo: insuranceInfo, financeData: financeData, phoneNumber: phone)
+            let newPatient = try Patient(initWithInfo: name, married: maritalStatus, gender: gender, birthday: birthday, ssn: ssn, address: address, insuranceInfo: insuranceInfo, financeData: financeInfo, phoneNumber: phone)
             let patientRecord = PatientRecord()
             patientRecord.patient = newPatient
             patientRecord.canBeDischarged = false

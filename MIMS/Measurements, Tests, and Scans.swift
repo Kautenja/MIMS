@@ -152,15 +152,21 @@ class Measurement: PFObject, PFSubclassing {
 }
 
 //MARK: Test Class
+
 class Test: PFObject, PFSubclassing {
     
     var timeCreated: NSDate? {
-        get { return self.createdAt}
+        get {return self.createdAt}
     }
     
     var timeModified: NSDate? {
-        get { return self.updatedAt}
+        get {return self.updatedAt}
         set {}
+    }
+    
+    var timeStarted: NSDate? {
+        get {return self["timeStarted"] as? NSDate}
+        set{if newValue != nil {self["timeStarted"] = newValue!}}
     }
     
     var timeCompleted: NSDate? {
@@ -182,6 +188,20 @@ class Test: PFObject, PFSubclassing {
     convenience init(initWithTestDescription description: String) {
         self.init()
         self.testDescription = description
+        self.completedStatus = false
+    }
+    
+    func changeCompletionStatus(newStatus: Bool, timeCompleted: NSDate) {
+        self.completedStatus = newStatus
+        self.timeCompleted = timeCompleted
+    }
+    
+    func markAsStarted(startTime: NSDate) ->Bool {
+        if !completedStatus! {
+            self.timeStarted = startTime
+            return true
+        }
+        return false
     }
     
     class func parseClassName() -> String {
@@ -199,14 +219,39 @@ class Scan: PFObject, PFSubclassing {
         set {}
     }
     
+    var timeStarted: NSDate? {
+        get {return self["timeStarted"] as? NSDate}
+        set{if newValue != nil {self["timeStarted"] = newValue!}}
+    }
+    
+    var timeCompleted: NSDate? {
+        get {return self["timeCompleted"] as? NSDate}
+        set {if newValue != nil {self["timeCompleted"] = newValue!}}
+    }
+    
     var scanType: String? {
         get {return self["scanType"] as? String }
         set { if newValue != nil {self["scanType"] = newValue!} }
     }
     
+    var completedStatus: Bool? {
+        get { return self["completed"] as? Bool }
+        set { if newValue != nil {self["completed"] = newValue! }}
+    }
+    
     convenience init(initWithType type: String) {
         self.init()
         self.scanType = type
+        self.completedStatus = false
+    }
+    
+    func changeCompletionStatus(newStatus: Bool, timeCompleted: NSDate) {
+        self.completedStatus = newStatus
+        self.timeCompleted = timeCompleted
+    }
+    
+    func markAsStarted(startTime: NSDate) {
+        self.timeStarted = startTime
     }
     
     class func parseClassName() -> String {
