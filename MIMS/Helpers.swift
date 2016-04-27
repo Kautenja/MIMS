@@ -274,6 +274,11 @@ class Appointment: PFObject, PFSubclassing {
         }
     }
     
+    var associatedPatient: Patient? {
+        get {return self["patient"] as? Patient}
+        set {if newValue != nil {self["patient"] = newValue!}}
+    }
+    
     var department: Department? {
         get { return self["department"] as? Department }
         set { if newValue != nil { self["department"] = newValue! } }
@@ -282,6 +287,14 @@ class Appointment: PFObject, PFSubclassing {
     var appointmentNotes: [String]? {
         get { return self["notes"] as? [String] }
         set {}
+    }
+    
+    convenience init(initWithDoctor doctor: MIMSUser, patient: Patient, timeScheduled: NSDate, department: Department) {
+        self.init()
+        self.attendingPhysician = doctor
+        self.associatedPatient = patient
+        self.timeScheduled = timeScheduled
+        self.department = department
     }
     
     class func parseClassName() -> String {

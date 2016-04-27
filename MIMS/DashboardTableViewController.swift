@@ -75,7 +75,7 @@ class DashboardTableViewController: UITableViewController, SWRevealViewControlle
         self.title = userType
         flag = userType
         
-        ParseClient.addPatientData()
+        //ParseClient.addPatientData()
 
     }
 

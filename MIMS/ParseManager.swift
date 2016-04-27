@@ -120,6 +120,19 @@ class ParseClient {
         }
     }
     
+    class func queryAppointments(completion: (appointments: [Appointment]?, error: NSError?) ->()) {
+        let query = PFQuery(className: "Appointment")
+        query.whereKey("doctor", equalTo: MIMSUser.currentUser()!)
+        query.includeKey("patient")
+        query.findObjectsInBackgroundWithBlock { (appointments, error) in
+            if error == nil && appointments!.count > 0 {
+                completion(appointments: appointments as? [Appointment], error: nil)
+            } else {
+                completion(appointments: nil, error: error!)
+            }
+        }
+    }
+    
     class func addPatientData() {
         let address = Address()
         try! address.newAddress("111 Test Street", city: "Auburn:", state: "AL", zip: "36832")
@@ -309,7 +322,19 @@ class ParseClient {
         treatments.fetchInBackgroundWithBlock { (newTreatments, error) in
             if error == nil {
                 for script in newlyRequestedScripts {
-                    (newTreatments as! Treatment).addNewScript(script)
+                    let scripts = treatments.prescriptions
+                    var scriptDescriptions: [String]!
+                    for script in scripts! {
+                        scriptDescriptions.appendContentsOf(script.scripts!)
+                    }
+                    for description in scriptDescriptions {
+                        if !(record.conditions?.allergies?.contains(description))! {
+                            (newTreatments as! Treatment).addNewScript(script)
+                        } else {
+                            let error = NSError(domain: "Patient Treatments", code: 001, userInfo: ["description": "Can't prescribe a medication the patient is allergic to!"])
+                            completion(error: error)
+                        }
+                    }
                 }
                 newTreatments?.saveEventually()
                 completion(error: nil)

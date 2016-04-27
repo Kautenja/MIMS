@@ -33,4 +33,21 @@ class MIMSTests: XCTestCase {
         }
     }
     
+    func testTimeFromDate() {
+        let date = NSDate()
+        print(date.getTimeForAppointment())
+    }
+    
+    func testDayFromDate() {
+        let date = NSDate()
+        print(date.getDateForAppointment())
+    }
+    
+    func testAddAppointment() {
+        let patient = Patient(withoutDataWithClassName: "Patient", objectId: "Xsl7iRq2jT")
+        let department = try! Department(withName: "ENT")
+        let appointment = Appointment(initWithDoctor: MIMSUser.currentUser()!, patient: patient, timeScheduled: NSDate(), department: department)
+        try! appointment.save()
+    }
+    
 }

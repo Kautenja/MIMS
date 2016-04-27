@@ -11,6 +11,7 @@ import UIKit
 class AppointmentsTableViewController: UITableViewController, SWRevealViewControllerDelegate {
 
     var menuButton: UIButton!
+    var appointments: [Appointment]?
     
     let name = ["Abe Lincon","Billy Manchester","Clyde S. Dale","Doug Chandler","Elvira Moody", "Fransis Ogertree", "Hilary Clinton", "Jacob Jenkins", "Kelly Price", "Low Mill", "Micheal Scott", "No Name", "Oliver Queen"]
     
@@ -42,11 +43,22 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
         
         self.setNeedsStatusBarAppearanceUpdate()
         
+        self.tableView.tableFooterView = UIView()
+        
+        self.queryAppointments()
         
         let nib1 = UINib(nibName: "MIMSCell", bundle: nil)
         tableView.registerNib(nib1, forCellReuseIdentifier: "MIMS")
     }
 
+    func queryAppointments() {
+        ParseClient.queryAppointments { (appointments, error) in
+            if error == nil && appointments != nil {
+                self.appointments = appointments
+                self.tableView.reloadData()
+            }
+        }
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -61,18 +73,28 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.name.count
+        //return self.name.count
+        guard appointments != nil else {
+            return 0
+        }
+        return appointments!.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MIMS", forIndexPath: indexPath) as! MIMSTableViewCell
         
-        cell.titleLabel.text = name[indexPath.row]
-        cell.detailLabel1.text = detail0[indexPath.row]
-        cell.detailLabel2.text = detail1[indexPath.row]
-        cell.detailLabel3.text = detail2[indexPath.row]
-        cell.sideInformationLabel.text = detail3[indexPath.row]
+        let appointment = appointments![indexPath.row]
+        let patient = appointment.associatedPatient
+        let scheduledTime = appointment.timeScheduled
+        let detail0 = scheduledTime?.getDateForAppointment()
+        let detail1 = scheduledTime?.getTimeForAppointment()
+        
+        cell.titleLabel.text = patient?.name
+        cell.detailLabel1.text = detail0!
+        cell.detailLabel2.text = detail1!
+        cell.detailLabel3.text = detail2.first
+        cell.sideInformationLabel.text = detail3.first
         return cell
     }
     
