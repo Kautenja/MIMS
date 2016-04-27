@@ -8,7 +8,7 @@ pod ‘ParseUI’
 pod ‘SmileTouchID’
 pod ‘IQKeyboardManager’
 pod ‘DZNEmptyDataSet’
-#pod 'THCalendarDatePicker'
+pod 'THCalendarDatePicker'
 
 post_install do |installer|
   installer.pods_project.build_configuration_list.build_configurations.each do |configuration|

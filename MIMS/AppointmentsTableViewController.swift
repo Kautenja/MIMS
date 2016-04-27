@@ -264,7 +264,7 @@ extension AppointmentsTableViewController: THDatePickerDelegate {
     func datePickerCancelPressed(datePicker: THDatePickerViewController!) {
         dismissSemiModalView()
     }
-    
+
     func updateText(sender: UIDatePicker) {
         
         let components = NSCalendar.currentCalendar().components(

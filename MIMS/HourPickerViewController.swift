@@ -45,7 +45,7 @@ class HourPickerViewController: UIViewController {
     }
     
     @IBAction func cancelPresses(sender: UIButton) {
-        self.dismissSemiModalView()
+        //self.dismissSemiModalView()
     }
 
 }
