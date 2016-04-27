@@ -6,6 +6,8 @@
 build/
 DerivedData/
 
+Pods/Pods.xcodeproj/xcuserdata/PatrickBush.xcuserdatad/xcschemes/xcschememanagement.plist
+
 ## Various settings
 *.pbxuser
 !default.pbxuser
