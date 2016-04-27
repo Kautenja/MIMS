@@ -15,21 +15,21 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
     var appointments: [Appointment]?
     var appointmentEdited: Appointment?
     
-//    lazy var datePicker:THDatePickerViewController = {
-//        var dp = THDatePickerViewController.datePicker()
-//        dp.delegate = self
-//        dp.setAllowClearDate(false)
-//        dp.setClearAsToday(true)
-//        dp.setAutoCloseOnSelectDate(false)
-//        dp.setAllowSelectionOfSelectedDate(true)
-//        dp.setDisableHistorySelection(true)
-//        dp.setDisableFutureSelection(false)
-//        //dp.autoCloseCancelDelay = 5.0
-//        dp.selectedBackgroundColor = UIColor.blackColor() //UIColor(red: 125/255.0, green: 208/255.0, blue: 0/255.0, alpha: 1.0)
-//        dp.currentDateColor = UIColor.lightGrayColor()// UIColor(red: 242/255.0, green: 121/255.0, blue: 53/255.0, alpha: 1.0)
-//        dp.currentDateColorSelected = UIColor.darkGrayColor() //UIColor.yellowColor()
-//        return dp
-//    }()
+    lazy var datePicker:THDatePickerViewController = {
+        var dp = THDatePickerViewController.datePicker()
+        dp.delegate = self
+        dp.setAllowClearDate(false)
+        dp.setClearAsToday(true)
+        dp.setAutoCloseOnSelectDate(false)
+        dp.setAllowSelectionOfSelectedDate(true)
+        dp.setDisableHistorySelection(true)
+        dp.setDisableFutureSelection(false)
+        //dp.autoCloseCancelDelay = 5.0
+        dp.selectedBackgroundColor = UIColor.blackColor() //UIColor(red: 125/255.0, green: 208/255.0, blue: 0/255.0, alpha: 1.0)
+        dp.currentDateColor = UIColor.lightGrayColor()// UIColor(red: 242/255.0, green: 121/255.0, blue: 53/255.0, alpha: 1.0)
+        dp.currentDateColorSelected = UIColor.darkGrayColor() //UIColor.yellowColor()
+        return dp
+    }()
     
     lazy var hourDatePicker: UIDatePicker = {
         let screenSize = UIScreen.mainScreen().bounds
@@ -190,16 +190,16 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             }
             self.appointmentEdited = appointment
             
-//            self.datePicker.date = NSDate()
-//            self.datePicker.setDateHasItemsCallback({(date:NSDate!) -> Bool in
-//                let tmp = (arc4random() % 30) + 1
-//                return tmp % 5 == 0
-//            })
-//            self.presentSemiViewController(self.datePicker, withOptions: [
-//                self.convertCfTypeToString(KNSemiModalOptionKeys.shadowOpacity) as String! : 0.3 as Float,
-//                self.convertCfTypeToString(KNSemiModalOptionKeys.animationDuration) as String! : 1.0 as Float,
-//                self.convertCfTypeToString(KNSemiModalOptionKeys.pushParentBack) as String! : false as Bool
-//                ])
+            self.datePicker.date = NSDate()
+            self.datePicker.setDateHasItemsCallback({(date:NSDate!) -> Bool in
+                let tmp = (arc4random() % 30) + 1
+                return tmp % 5 == 0
+            })
+            self.presentSemiViewController(self.datePicker, withOptions: [
+                self.convertCfTypeToString(KNSemiModalOptionKeys.shadowOpacity) as String! : 0.3 as Float,
+                self.convertCfTypeToString(KNSemiModalOptionKeys.animationDuration) as String! : 1.0 as Float,
+                self.convertCfTypeToString(KNSemiModalOptionKeys.pushParentBack) as String! : false as Bool
+                ])
         })
         
         rescheduleAction.backgroundColor = UIColor.blueColor()
@@ -228,79 +228,79 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
 
 }
 
-//extension AppointmentsTableViewController: THDatePickerDelegate {
-//    func datePickerDonePressed(datePicker: THDatePickerViewController!) {
-//        newlySelectedDate = datePicker.date.dateByAddingTimeInterval(NSTimeInterval(25200))
-//        dismissSemiModalView()
-//        let hourController = UIAlertController(title: "Pick a new time", message: "Between 7AM and 8PM", preferredStyle: .Alert)
-//        hourController.addTextFieldWithConfigurationHandler { (textField) in
-//            textField.inputView = self.hourDatePicker
-//            let formatter = NSDateFormatter()
-//            formatter.timeStyle = .LongStyle
-//            let date = formatter.stringFromDate(self.newlySelectedDate)
-//            //print(date)
-//            textField.placeholder = date
-//            self.hourDatePicker.addTarget(self, action: #selector(AppointmentsTableViewController.updateText(_:)), forControlEvents: .AllEvents)
-//            self.hourTextField = textField
-//        }
-//        hourController.addAction(UIAlertAction(title: "Reschedule", style: .Default, handler: { (action) in
-//            self.tableView.endEditing(true)
-//            self.newlySelectedDate = self.hourDatePicker.date
-//            self.appointmentEdited!.timeScheduled = self.newlySelectedDate
-//            self.appointmentEdited?.saveInBackgroundWithBlock({ (success, error) in
-//                if success && error == nil {
-//                    self.queryAppointments()
-//                } else {
-//                    //TODO: Present alert for unable to complete request
-//                }
-//            })
-//        }))
-//        hourController.addAction(UIAlertAction(title: "Cancel", style: .Destructive, handler: nil))
-//        self.presentViewController(hourController, animated: true, completion: nil)
-//
-//        
-//    }
-//    
-//    func datePickerCancelPressed(datePicker: THDatePickerViewController!) {
-//        dismissSemiModalView()
-//    }
+extension AppointmentsTableViewController: THDatePickerDelegate {
+    func datePickerDonePressed(datePicker: THDatePickerViewController!) {
+        newlySelectedDate = datePicker.date.dateByAddingTimeInterval(NSTimeInterval(25200))
+        dismissSemiModalView()
+        let hourController = UIAlertController(title: "Pick a new time", message: "Between 7AM and 8PM", preferredStyle: .Alert)
+        hourController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.inputView = self.hourDatePicker
+            let formatter = NSDateFormatter()
+            formatter.timeStyle = .LongStyle
+            let date = formatter.stringFromDate(self.newlySelectedDate)
+            //print(date)
+            textField.placeholder = date
+            self.hourDatePicker.addTarget(self, action: #selector(AppointmentsTableViewController.updateText(_:)), forControlEvents: .AllEvents)
+            self.hourTextField = textField
+        }
+        hourController.addAction(UIAlertAction(title: "Reschedule", style: .Default, handler: { (action) in
+            self.tableView.endEditing(true)
+            self.newlySelectedDate = self.hourDatePicker.date
+            self.appointmentEdited!.timeScheduled = self.newlySelectedDate
+            self.appointmentEdited?.saveInBackgroundWithBlock({ (success, error) in
+                if success && error == nil {
+                    self.queryAppointments()
+                } else {
+                    //TODO: Present alert for unable to complete request
+                }
+            })
+        }))
+        hourController.addAction(UIAlertAction(title: "Cancel", style: .Destructive, handler: nil))
+        self.presentViewController(hourController, animated: true, completion: nil)
 
-//    func updateText(sender: UIDatePicker) {
-//        
-//        let components = NSCalendar.currentCalendar().components(
-//            [NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Weekday, NSCalendarUnit.WeekdayOrdinal, NSCalendarUnit.WeekOfYear],
-//            fromDate: sender.date)
-//        
-//        if components.hour < 7 {
-//            components.hour = 7
-//            components.minute = 0
-//            sender.setDate(NSCalendar.currentCalendar().dateFromComponents(components)!, animated: true)
-//        }
-//        else if components.hour > 20 {
-//            components.hour = 20
-//            components.minute = 0
-//            sender.setDate(NSCalendar.currentCalendar().dateFromComponents(components)!, animated: true)
-//        }
-//        else {
-//            print("Everything is good.")
-//        }
-//        
-//        let formatter = NSDateFormatter()
-//        formatter.timeStyle = .LongStyle
-//        let date = formatter.stringFromDate(sender.date)
-//        self.hourTextField.text = date
-//    }
-//    
-//    
-//    /* https://vandadnp.wordpress.com/2014/07/07/swift-convert-unmanaged-to-string/ */
-//    func convertCfTypeToString(cfValue: Unmanaged<NSString>!) -> String?{
-//        /* Coded by Vandad Nahavandipoor */
-//        let value = Unmanaged<CFStringRef>.fromOpaque(
-//            cfValue.toOpaque()).takeUnretainedValue() as CFStringRef
-//        if CFGetTypeID(value) == CFStringGetTypeID(){
-//            return value as String
-//        } else {
-//            return nil
-//        }
-//    }
-//}
+        
+    }
+    
+    func datePickerCancelPressed(datePicker: THDatePickerViewController!) {
+        dismissSemiModalView()
+    }
+
+    func updateText(sender: UIDatePicker) {
+        
+        let components = NSCalendar.currentCalendar().components(
+            [NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Weekday, NSCalendarUnit.WeekdayOrdinal, NSCalendarUnit.WeekOfYear],
+            fromDate: sender.date)
+        
+        if components.hour < 7 {
+            components.hour = 7
+            components.minute = 0
+            sender.setDate(NSCalendar.currentCalendar().dateFromComponents(components)!, animated: true)
+        }
+        else if components.hour > 20 {
+            components.hour = 20
+            components.minute = 0
+            sender.setDate(NSCalendar.currentCalendar().dateFromComponents(components)!, animated: true)
+        }
+        else {
+            print("Everything is good.")
+        }
+        
+        let formatter = NSDateFormatter()
+        formatter.timeStyle = .LongStyle
+        let date = formatter.stringFromDate(sender.date)
+        self.hourTextField.text = date
+    }
+    
+    
+    /* https://vandadnp.wordpress.com/2014/07/07/swift-convert-unmanaged-to-string/ */
+    func convertCfTypeToString(cfValue: Unmanaged<NSString>!) -> String?{
+        /* Coded by Vandad Nahavandipoor */
+        let value = Unmanaged<CFStringRef>.fromOpaque(
+            cfValue.toOpaque()).takeUnretainedValue() as CFStringRef
+        if CFGetTypeID(value) == CFStringGetTypeID(){
+            return value as String
+        } else {
+            return nil
+        }
+    }
+}
