@@ -73,6 +73,9 @@ typedef NS_ENUM(int, SecurityType) {
 +(BOOL)hasPassword;
 +(BOOL)isSamePassword:(NSString *)userInput;
 +(void)clearPassword;
+/*!@brief Manually change authentication status, e.g., when your app has a payment view, you want to show authentication view when visit the payment view.*/
+-(void)changeAuthentication:(BOOL)newAuth;
+
 
 -(void)userSetPassword:(NSString*)newPassword;
 -(void)authenticateWithSuccess:(AuthCompletionBlock) authSuccessBlock andFailure:(AuthErrorBlock) failureBlock;

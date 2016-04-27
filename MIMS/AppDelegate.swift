@@ -30,9 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Prescription.registerSubclass()
         MIMSUser.registerSubclass()
         Appointment.registerSubclass()
-
-        //Surgery.registerSubclass()
-        //Immunization.registerSubclass()
+        Surgery.registerSubclass()
+        Immunization.registerSubclass()
 
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         UINavigationBar.appearance().barStyle = UIBarStyle.BlackOpaque

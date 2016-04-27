@@ -248,13 +248,13 @@ class Institution: PFObject, PFSubclassing {
 
 class Appointment: PFObject, PFSubclassing {
     
-    var timeCreated: NSDate? {
+    var timeCreated: NSDate! {
         get { return self.createdAt }
     }
     
-    var timeScheduled: NSDate? {
+    var timeScheduled: NSDate! {
         get {
-            return self["timeScheduled"] as? NSDate
+            return self["timeScheduled"] as! NSDate
         }
         set {
             if newValue != nil {
@@ -263,25 +263,33 @@ class Appointment: PFObject, PFSubclassing {
         }
     }
     
-    var attendingPhysician: MIMSUser? {
+    var timeCompleted: NSDate? {
+        get {return self["timeCompleted"] as? NSDate}
+        set {if newValue != nil {self["timeCompleted"] = newValue!}}
+    }
+    
+    var attendingPhysician: MIMSUser {
         get {
-            return self["doctor"] as? MIMSUser
+            return self["doctor"] as! MIMSUser
         }
         set {
-            if newValue != nil {
-                self["doctor"] = newValue!
+                self["doctor"] = newValue
             }
-        }
     }
     
-    var associatedPatient: Patient? {
-        get {return self["patient"] as? Patient}
-        set {if newValue != nil {self["patient"] = newValue!}}
+    var completed: Bool {
+        get {return self["completed"] as! Bool}
+        set{}
     }
     
-    var department: Department? {
-        get { return self["department"] as? Department }
-        set { if newValue != nil { self["department"] = newValue! } }
+    var associatedPatient: Patient {
+        get {return self["patient"] as! Patient}
+        set {self["patient"] = newValue}
+    }
+    
+    var department: Department {
+        get { return self["department"] as! Department }
+        set {self["department"] = newValue }
     }
     
     var appointmentNotes: [String]? {
@@ -295,6 +303,16 @@ class Appointment: PFObject, PFSubclassing {
         self.associatedPatient = patient
         self.timeScheduled = timeScheduled
         self.department = department
+        self.completed = false
+    }
+    
+    func markAsCompleted() {
+        completed = true
+        self.timeCompleted = NSDate()
+    }
+    
+    func reschedule(withNewDate date: NSDate) {
+        if date > timeScheduled { timeScheduled = date }
     }
     
     class func parseClassName() -> String {

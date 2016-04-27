@@ -87,19 +87,23 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Bolts/Bolts.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DZNEmptyDataSet/DZNEmptyDataSet.framework"
   install_framework "$BUILT_PRODUCTS_DIR/IQKeyboardManager/IQKeyboardManager.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/KNSemiModalViewController_hons82/KNSemiModalViewController_hons82.framework"
   install_framework "$BUILT_PRODUCTS_DIR/MBProgressHUD/MBProgressHUD.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Parse/Parse.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ParseUI/ParseUI.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SQLite.swift/SQLite.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SmileTouchID/SmileTouchID.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/THCalendarDatePicker/THCalendarDatePicker.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Bolts/Bolts.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DZNEmptyDataSet/DZNEmptyDataSet.framework"
   install_framework "$BUILT_PRODUCTS_DIR/IQKeyboardManager/IQKeyboardManager.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/KNSemiModalViewController_hons82/KNSemiModalViewController_hons82.framework"
   install_framework "$BUILT_PRODUCTS_DIR/MBProgressHUD/MBProgressHUD.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Parse/Parse.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ParseUI/ParseUI.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SQLite.swift/SQLite.framework"
   install_framework "$BUILT_PRODUCTS_DIR/SmileTouchID/SmileTouchID.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/THCalendarDatePicker/THCalendarDatePicker.framework"
 fi

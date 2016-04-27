@@ -133,6 +133,14 @@ class ParseClient {
         }
     }
     
+    class func deleteObject(objectToDelete: PFObject, completion: (success: Bool, error: NSError?)->()) {
+        objectToDelete.deleteInBackgroundWithBlock { (success, error) in
+            if success && error == nil {
+                completion(success: true, error: nil)
+            }
+            else { completion(success: false, error: error!) }
+        }
+    }
     class func addPatientData() {
         let address = Address()
         try! address.newAddress("111 Test Street", city: "Auburn:", state: "AL", zip: "36832")

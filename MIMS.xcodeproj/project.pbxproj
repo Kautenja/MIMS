@@ -37,6 +37,7 @@
 		8F6AFF881CC6A69D00A8A1F0 /* DashboardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6AFF871CC6A69D00A8A1F0 /* DashboardTableViewController.swift */; };
 		8F6AFF8B1CC6A8D900A8A1F0 /* RevealViewTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6AFF8A1CC6A8D900A8A1F0 /* RevealViewTableViewController.swift */; };
 		8F6AFF8D1CC6ABB900A8A1F0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6AFF8C1CC6ABB900A8A1F0 /* Constants.swift */; };
+		8F886CF61CD0895500E80F7F /* HourPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F886CF41CD0895500E80F7F /* HourPickerViewController.swift */; };
 		8FF2F8EF1CC5270000E207B3 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FF2F8EE1CC5270000E207B3 /* SWRevealViewController.m */; };
 		D110DD7B38F1143E0AD23770 /* Pods_MIMS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CB677F43484CB2D4FB2691F /* Pods_MIMS.framework */; };
 /* End PBXBuildFile section */
@@ -88,6 +89,7 @@
 		8F6AFF871CC6A69D00A8A1F0 /* DashboardTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardTableViewController.swift; sourceTree = "<group>"; };
 		8F6AFF8A1CC6A8D900A8A1F0 /* RevealViewTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RevealViewTableViewController.swift; sourceTree = "<group>"; };
 		8F6AFF8C1CC6ABB900A8A1F0 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8F886CF41CD0895500E80F7F /* HourPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HourPickerViewController.swift; sourceTree = "<group>"; };
 		8FF2F8EC1CC526FF00E207B3 /* MIMS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MIMS-Bridging-Header.h"; sourceTree = "<group>"; };
 		8FF2F8ED1CC5270000E207B3 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		8FF2F8EE1CC5270000E207B3 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				8F2742601CC9BD2900D7B4B6 /* AppointmentsTableViewController.swift */,
+				8F886CF41CD0895500E80F7F /* HourPickerViewController.swift */,
 			);
 			name = Appointments;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 				8F2742701CCE79F300D7B4B6 /* Patients.swift in Sources */,
 				8F2742781CCE7B4100D7B4B6 /* Conditions.swift in Sources */,
 				8F2742721CCE7A3A00D7B4B6 /* Finance&Insurance.swift in Sources */,
+				8F886CF61CD0895500E80F7F /* HourPickerViewController.swift in Sources */,
 				2F7D060B1CCA9FA60081F59D /* MIMSTableViewCell.swift in Sources */,
 				8F0CD4221CB737F500615490 /* AppDelegate.swift in Sources */,
 				8F27427A1CCE7B6E00D7B4B6 /* Users.swift in Sources */,

@@ -7,11 +7,45 @@
 //
 
 import UIKit
+import THCalendarDatePicker
 
 class AppointmentsTableViewController: UITableViewController, SWRevealViewControllerDelegate {
 
     var menuButton: UIButton!
     var appointments: [Appointment]?
+    var appointmentEdited: Appointment?
+    
+    lazy var datePicker:THDatePickerViewController = {
+        var dp = THDatePickerViewController.datePicker()
+        dp.delegate = self
+        dp.setAllowClearDate(false)
+        dp.setClearAsToday(true)
+        dp.setAutoCloseOnSelectDate(false)
+        dp.setAllowSelectionOfSelectedDate(true)
+        dp.setDisableHistorySelection(true)
+        dp.setDisableFutureSelection(false)
+        //dp.autoCloseCancelDelay = 5.0
+        dp.selectedBackgroundColor = UIColor.blackColor() //UIColor(red: 125/255.0, green: 208/255.0, blue: 0/255.0, alpha: 1.0)
+        dp.currentDateColor = UIColor.lightGrayColor()// UIColor(red: 242/255.0, green: 121/255.0, blue: 53/255.0, alpha: 1.0)
+        dp.currentDateColorSelected = UIColor.darkGrayColor() //UIColor.yellowColor()
+        return dp
+    }()
+    
+    lazy var hourDatePicker: UIDatePicker = {
+        let screenSize = UIScreen.mainScreen().bounds
+        var hourPicker = UIDatePicker() //UIDatePicker(frame: CGRect(x: screenSize.minX, y: screenSize.maxY - 100, width: screenSize.width, height: 100))
+        hourPicker.datePickerMode = UIDatePickerMode.Time
+        let currentDate = self.newlySelectedDate
+        hourPicker.minimumDate = currentDate
+        hourPicker.minuteInterval = 10
+        return hourPicker
+    }()
+    
+    lazy var newlySelectedDate: NSDate = NSDate()
+    lazy var hourTextField: UITextField = {
+       let textField = UITextField()
+        return textField
+    }()
     
     let name = ["Abe Lincon","Billy Manchester","Clyde S. Dale","Doug Chandler","Elvira Moody", "Fransis Ogertree", "Hilary Clinton", "Jacob Jenkins", "Kelly Price", "Low Mill", "Micheal Scott", "No Name", "Oliver Queen"]
     
@@ -90,7 +124,7 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
         let detail0 = scheduledTime?.getDateForAppointment()
         let detail1 = scheduledTime?.getTimeForAppointment()
         
-        cell.titleLabel.text = patient?.name
+        cell.titleLabel.text = patient.name
         cell.detailLabel1.text = detail0!
         cell.detailLabel2.text = detail1!
         cell.detailLabel3.text = detail2.first
@@ -113,7 +147,16 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             // 2
             let shareMenu = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: .ActionSheet)
             
-            let cancelAction = UIAlertAction(title: "Cancel Appointment", style: UIAlertActionStyle.Destructive, handler: nil)
+            let cancelAction = UIAlertAction(title: "Cancel Appointment", style: .Destructive, handler: { (action) in
+                guard let appointment = self.appointments?[indexPath.row] else {
+                    return
+                }
+                ParseClient.deleteObject(appointment) { (success, error) in
+                    if !success {
+                        //TODO: Report an error
+                    }
+                }
+            })
             let goBackAction = UIAlertAction(title: "Don't Cancel Appointment", style: UIAlertActionStyle.Cancel, handler: nil)
 
             shareMenu.addAction(goBackAction)
@@ -126,7 +169,12 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             // 2
             let shareMenu = UIAlertController(title: nil, message: "Complete the Appointment?", preferredStyle: .ActionSheet)
             
-            let doneAction = UIAlertAction(title: "Finish!", style: UIAlertActionStyle.Default, handler: nil)
+            let doneAction = UIAlertAction(title: "Finish!", style: UIAlertActionStyle.Default, handler: {(action) in
+                guard let appointment = self.appointments?[indexPath.row] else {
+                    return
+                }
+                appointment.markAsCompleted()
+            })
             let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
 
             shareMenu.addAction(doneAction)
@@ -136,24 +184,22 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
             self.presentViewController(shareMenu, animated: true, completion: nil)
         })
         let rescheduleAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "Reschedule" , handler: { (action:UITableViewRowAction!, indexPath:NSIndexPath!) -> Void in
-            // 2
-            let shareMenu = UIAlertController(title: nil, message: "Reschedule the Appointment?", preferredStyle: .Alert)
-            
-            let doneAction = UIAlertAction(title: "Done", style: UIAlertActionStyle.Default, handler: nil)
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil)
 
-            
-            shareMenu.addAction(doneAction)
-            shareMenu.addAction(cancelAction)
-            
-            
-            shareMenu.addTextFieldWithConfigurationHandler { (textField) in
-                textField.placeholder = "Enter a time: 8am - 10pm"
+            guard let appointment = self.appointments?[indexPath.row] else {
+                return
             }
-
+            self.appointmentEdited = appointment
             
-            
-            self.presentViewController(shareMenu, animated: true, completion: nil)
+            self.datePicker.date = NSDate()
+            self.datePicker.setDateHasItemsCallback({(date:NSDate!) -> Bool in
+                let tmp = (arc4random() % 30) + 1
+                return tmp % 5 == 0
+            })
+            self.presentSemiViewController(self.datePicker, withOptions: [
+                self.convertCfTypeToString(KNSemiModalOptionKeys.shadowOpacity) as String! : 0.3 as Float,
+                self.convertCfTypeToString(KNSemiModalOptionKeys.animationDuration) as String! : 1.0 as Float,
+                self.convertCfTypeToString(KNSemiModalOptionKeys.pushParentBack) as String! : false as Bool
+                ])
         })
         
         rescheduleAction.backgroundColor = UIColor.blueColor()
@@ -180,4 +226,81 @@ class AppointmentsTableViewController: UITableViewController, SWRevealViewContro
     }
     */
 
+}
+
+extension AppointmentsTableViewController: THDatePickerDelegate {
+    func datePickerDonePressed(datePicker: THDatePickerViewController!) {
+        newlySelectedDate = datePicker.date.dateByAddingTimeInterval(NSTimeInterval(25200))
+        dismissSemiModalView()
+        let hourController = UIAlertController(title: "Pick a new time", message: "Between 7AM and 8PM", preferredStyle: .Alert)
+        hourController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.inputView = self.hourDatePicker
+            let formatter = NSDateFormatter()
+            formatter.timeStyle = .LongStyle
+            let date = formatter.stringFromDate(self.newlySelectedDate)
+            //print(date)
+            textField.placeholder = date
+            self.hourDatePicker.addTarget(self, action: #selector(AppointmentsTableViewController.updateText(_:)), forControlEvents: .AllEvents)
+            self.hourTextField = textField
+        }
+        hourController.addAction(UIAlertAction(title: "Reschedule", style: .Default, handler: { (action) in
+            self.tableView.endEditing(true)
+            self.newlySelectedDate = self.hourDatePicker.date
+            self.appointmentEdited!.timeScheduled = self.newlySelectedDate
+            self.appointmentEdited?.saveInBackgroundWithBlock({ (success, error) in
+                if success && error == nil {
+                    self.queryAppointments()
+                } else {
+                    //TODO: Present alert for unable to complete request
+                }
+            })
+        }))
+        hourController.addAction(UIAlertAction(title: "Cancel", style: .Destructive, handler: nil))
+        self.presentViewController(hourController, animated: true, completion: nil)
+
+        
+    }
+    
+    func datePickerCancelPressed(datePicker: THDatePickerViewController!) {
+        dismissSemiModalView()
+    }
+    
+    func updateText(sender: UIDatePicker) {
+        
+        let components = NSCalendar.currentCalendar().components(
+            [NSCalendarUnit.Year, NSCalendarUnit.Month, NSCalendarUnit.Day, NSCalendarUnit.WeekOfYear, NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second, NSCalendarUnit.Weekday, NSCalendarUnit.WeekdayOrdinal, NSCalendarUnit.WeekOfYear],
+            fromDate: sender.date)
+        
+        if components.hour < 7 {
+            components.hour = 7
+            components.minute = 0
+            sender.setDate(NSCalendar.currentCalendar().dateFromComponents(components)!, animated: true)
+        }
+        else if components.hour > 20 {
+            components.hour = 20
+            components.minute = 0
+            sender.setDate(NSCalendar.currentCalendar().dateFromComponents(components)!, animated: true)
+        }
+        else {
+            print("Everything is good.")
+        }
+        
+        let formatter = NSDateFormatter()
+        formatter.timeStyle = .LongStyle
+        let date = formatter.stringFromDate(sender.date)
+        self.hourTextField.text = date
+    }
+    
+    
+    /* https://vandadnp.wordpress.com/2014/07/07/swift-convert-unmanaged-to-string/ */
+    func convertCfTypeToString(cfValue: Unmanaged<NSString>!) -> String?{
+        /* Coded by Vandad Nahavandipoor */
+        let value = Unmanaged<CFStringRef>.fromOpaque(
+            cfValue.toOpaque()).takeUnretainedValue() as CFStringRef
+        if CFGetTypeID(value) == CFStringGetTypeID(){
+            return value as String
+        } else {
+            return nil
+        }
+    }
 }
