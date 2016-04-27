@@ -1,6 +1,0 @@
-framework module THCalendarDatePicker {
-  umbrella header "THCalendarDatePicker-umbrella.h"
-
-  export *
-  module * { export * }
-}

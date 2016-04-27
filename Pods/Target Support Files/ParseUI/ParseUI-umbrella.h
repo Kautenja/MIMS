@@ -1,8 +1,8 @@
 #import <UIKit/UIKit.h>
 
 #import "PFLogInView.h"
-#import "PFLogInView_Private.h"
 #import "PFLogInViewController.h"
+#import "PFLogInView_Private.h"
 #import "PFSignUpView.h"
 #import "PFSignUpViewController.h"
 #import "PFQueryTableViewController.h"

@@ -8,8 +8,7 @@ pod ‘ParseUI’
 pod ‘SmileTouchID’
 pod ‘IQKeyboardManager’
 pod ‘DZNEmptyDataSet’
-pod 'SQLite.swift'
-pod 'THCalendarDatePicker', '~> 1.2.6'
+#pod 'THCalendarDatePicker'
 
 post_install do |installer|
   installer.pods_project.build_configuration_list.build_configurations.each do |configuration|

@@ -19,11 +19,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>KNSemiModalViewController_hons82.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>MBProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -49,17 +44,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SQLite.swift.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>SmileTouchID.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>THCalendarDatePicker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -72,32 +57,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1892213B8242D18974553DCC80A3C3FB</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>21084334654BA0BEBAAB0908ED83B17B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>2C8AA1BAF35413BDB954A1DF93576ED1</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>3F5B63BA212317EDA76B3024D806760C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>55A405CF277C6F4276EBD25B95F3664A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>9F130C39F88EE87FE34A53FC9A273B0F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,6 +72,16 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>D4968FB9E83D8882CAEFB18F17B06FB9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D5480B11641EDA61A45F6F5A138F4D66</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>E1F78B1C5F8F2CCD0E68552EAF2B9B52</key>
 		<dict>
 			<key>primary</key>
@@ -122,7 +92,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EB53D724894B045A2E3393DB6B87D25B</key>
+		<key>FFBDC9ECAB61B6B78EC302EAFE984D7E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
