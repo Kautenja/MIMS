@@ -19,6 +19,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>KNSemiModalViewController_hons82.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MBProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -49,10 +54,25 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>THCalendarDatePicker.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>0A3E406D569AC4AF20E35CBB1116F836</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>16FB872D0D2D4BA0F378AB34D47CF95F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1892213B8242D18974553DCC80A3C3FB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -62,22 +82,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>66971E9C3E9AFA7D7AEBE318838715BD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9AD84BB742448AC87C0C9CC7EB049E17</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>B272B33F162D6E5C3510BA50ECF2684B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>BD3F59CB06685116B8B5A473D4FD09EB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>C3088D509DCC08B3E07004508CF0BCC0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D4968FB9E83D8882CAEFB18F17B06FB9</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D5480B11641EDA61A45F6F5A138F4D66</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -88,11 +113,6 @@
 			<true/>
 		</dict>
 		<key>E61CE3B6DFA1FE6B3E296965C76C0E10</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FFBDC9ECAB61B6B78EC302EAFE984D7E</key>
 		<dict>
 			<key>primary</key>
 			<true/>

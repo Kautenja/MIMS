@@ -1,0 +1,6 @@
+framework module KNSemiModalViewController_hons82 {
+  umbrella header "KNSemiModalViewController_hons82-umbrella.h"
+
+  export *
+  module * { export * }
+}

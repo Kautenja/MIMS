@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import THCalendarDatePicker
+import THCalendarDatePicker
 
 class AppointmentsTableViewController: UITableViewController, SWRevealViewControllerDelegate {
 
