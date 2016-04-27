@@ -292,6 +292,7 @@ extension AppointmentsTableViewController: THDatePickerDelegate {
     }
     
     
+    
     /* https://vandadnp.wordpress.com/2014/07/07/swift-convert-unmanaged-to-string/ */
     func convertCfTypeToString(cfValue: Unmanaged<NSString>!) -> String?{
         /* Coded by Vandad Nahavandipoor */
